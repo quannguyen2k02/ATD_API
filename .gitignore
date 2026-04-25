@@ -1,0 +1,60 @@
+# Build output
+bin/
+obj/
+out/
+build/
+publish/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio / Rider cache
+.vs/
+.idea/
+*.csproj.user
+*.proj.user
+
+# Package references
+packages/
+*.nupkg
+*.snupkg
+
+# Test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Logs
+*.log
+*.logs
+logs/
+
+# Publish profiles
+*.pubxml.user
+
+# Entity Framework / Migrations (tuỳ ý - nếu bạn muốn giữ migration thì bỏ dòng này)
+# Migrations/
+
+# Node (nếu dùng frontend trong cùng solution)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Docker
+.dockerignore
+*.dockerignore
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+*.bak
+
+# OS metadata
+Thumbs.db
+.DS_Store
+Desktop.ini

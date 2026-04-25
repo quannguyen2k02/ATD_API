@@ -1,0 +1,54 @@
+﻿using Application.DTOs.RequestDTOs.LED;
+using Application.DTOs.ResponseDTOs;
+using Application.DTOs.ResponseDTOs.LED;
+using AutoMapper;
+using Domain.Enitties;
+using Domain.Entities.LED;
+namespace Infrastructure.ExternalServices.Mapper
+{
+    public class ApplicationMapper:Profile
+    {
+        public ApplicationMapper() 
+        {
+            CreateMap<LED, LEDDTO>();
+            CreateMap<Job, JobDTO>();
+            CreateMap<LedCamera, LedCameraDTO>();
+            CreateMap<LedModel, LedModelDTO>();
+            CreateMap<LedModelConfig, LedModelConfigDTO>();
+            CreateMap<LedStatus, LedStatusDTO>();
+            CreateMap<Line, LineDTO>();
+            CreateMap<LedConfig, LedConfigDTO>();
+            CreateMap<LedConfig, LedConfigResponse>();
+            CreateMap<LedConfig, LedConfigResponse>()
+            // Map cameras by combining value and status
+            .ForMember(dest => dest.Camera1, opt => opt.MapFrom(src => CombineWithUnderscore(src.Camera1, src.Camera1_Status)))
+            .ForMember(dest => dest.Camera2, opt => opt.MapFrom(src => CombineWithUnderscore(src.Camera2, src.Camera2_Status)))
+            .ForMember(dest => dest.Camera3, opt => opt.MapFrom(src => CombineWithUnderscore(src.Camera3, src.Camera3_Status)))
+            .ForMember(dest => dest.Camera4, opt => opt.MapFrom(src => CombineWithUnderscore(src.Camera4, src.Camera4_Status)))
+            .ForMember(dest => dest.Camera5, opt => opt.MapFrom(src => CombineWithUnderscore(src.Camera5, src.Camera5_Status)))
+            // Map SaftyPosition from X,Y,Z coordinates
+            .ForMember(dest => dest.SaftyPosition, opt => opt.MapFrom(src => CombineWithUnderscore(src.X_SaftyPosition, src.Y_SaftyPosition, src.Z_SaftyPosition)))
+            // Scanner is ignored (no source)
+            .ForMember(dest => dest.Scanner, opt => opt.Ignore())
+            // All other properties with same name are mapped automatically
+            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<Line, LineModelResponse>();
+
+            //reverse mapping
+            CreateMap<LEDDTO, LED>();
+            CreateMap<JobDTO, Job>();
+            CreateMap<LedCameraDTO, LedCamera>();
+            CreateMap<LedModelDTO, LedModel>();
+            CreateMap<LedModelConfigDTO, LedModelConfig>();
+            CreateMap<LedStatusDTO, LedStatus>();
+            CreateMap<LineDTO, Line>();
+            CreateMap<LedConfigDTO, LedConfig>();
+
+        }
+        private static string CombineWithUnderscore(params string?[] parts)
+        {
+            var nonEmpty = parts.Where(p => !string.IsNullOrEmpty(p)).ToArray();
+            return nonEmpty.Length == 0 ? null : string.Join("_", nonEmpty);
+        }
+    }
+}
