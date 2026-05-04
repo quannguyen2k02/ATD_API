@@ -23,26 +23,37 @@ namespace Infrastructure.Repositories.LED
 
         }
 
-        public async Task<PagedResult<LedConfig>> GetLedConfigByDeviceIdAsync(int deviceId, int? lastId = null, int pageSize = 20)
+        public async Task<CursorPagedResult<LedConfig>> GetLedConfigByDeviceIdAsync(int deviceId, int? lastId = null, int pageSize = 20)
         {
+            // Giới hạn pageSize hợp lý
+            pageSize = Math.Clamp(pageSize, 1, 100);
+
             var baseQuery = _context.LedConfigs.Where(x => x.LedId == deviceId);
             if (lastId.HasValue)
             {
                 baseQuery = baseQuery.Where(x => x.ID > lastId.Value);
             }
-            var totalCount = await _context.LEDModels
-                .Where(x => x.LedId == deviceId)
-                .CountAsync();
-            var items = await baseQuery
+
+            // Lấy thêm 1 bản ghi để xác định còn trang sau không
+            var itemsWithExtra = await baseQuery
                 .OrderBy(x => x.ID)
-                .Take(Math.Max(pageSize, 1))
+                .Take(pageSize + 1)
                 .ToListAsync();
-            return new PagedResult<LedConfig>
+
+            bool hasNextPage = itemsWithExtra.Count > pageSize;
+            var items = hasNextPage ? itemsWithExtra.Take(pageSize).ToList() : itemsWithExtra;
+
+            int? nextCursor = hasNextPage ? items.Last().ID : (int?)null;
+
+            // Optional: tính totalCount nếu cần, nhưng có thể bỏ qua để tối ưu
+            // var totalCount = await _context.LedConfigs.CountAsync(x => x.LedId == deviceId);
+
+            return new CursorPagedResult<LedConfig>
             {
                 Items = items,
-                PageNumber = lastId ?? 0, // reuse PageNumber field to carry lastId for client; not ideal but keeps signature
-                PageSize = pageSize,
-                TotalCount = totalCount
+                NextCursor = nextCursor,
+                HasNextPage = hasNextPage,
+                PageSize = pageSize
             };
         }
 

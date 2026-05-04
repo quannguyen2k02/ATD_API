@@ -13,6 +13,6 @@ namespace Application.IServices.LED
     {
         public Task<LedConfigDTO> AddLedConfigAsync(LedConfigDTO ledConfigDTO);
         // Keyset pagination: client supplies lastId (id of last item from previous page). If null, return first page.
-        public Task<PagedResult<LedConfigResponse>> GetLedConfigByDeviceIdAsync(int deviceId, int? lastId = null, int pageSize = 20);
+        public Task<CursorPagedResult<LedConfigResponse>> GetLedConfigByDeviceIdAsync(int deviceId, int? lastId = null, int pageSize = 20);
     }
 }

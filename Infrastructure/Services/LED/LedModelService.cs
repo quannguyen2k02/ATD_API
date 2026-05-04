@@ -1,5 +1,4 @@
-
-
+﻿
 using Application.Common;
 using Application.DTOs.RequestDTOs.LED;
 using Application.IRepositories;
@@ -41,8 +40,9 @@ namespace Infrastructure.Services.LED
             return _mapper.Map<LedModelDTO>(await _LedModelRepository.AddLedModelAsync(ledModel));
         }
 
-        public async Task<PagedResult<dynamic>> GetLedModelAsync(string line, string devicename, string model, string kb, string fp, int? lastId = null, int pageSize = 20)
+        public async Task<CursorPagedResult<dynamic>> GetLedModelAsync(string line, string devicename, string model, string kb, string fp, int? lastId = null, int pageSize = 20)
         {
+            // 1. Lấy lineId và deviceId (giữ nguyên)
             int? lineId = await _LineRepository.GetIdByLineName(line);
             if (!lineId.HasValue)
                 throw new NotFoundException($"Line with name '{line}' was not found.");
@@ -50,27 +50,23 @@ namespace Infrastructure.Services.LED
             int? deviceId = await _LedRepository.GetDeviceIdByDeviceNameAndLineNameAsync(devicename, (int)lineId);
             if (!deviceId.HasValue)
                 throw new NotFoundException($"Device with name '{devicename}' in line '{line}' was not found.");
-
             var repoPage = await _LedModelRepository.GetLedModelAsync((int)deviceId, model, kb, fp, lastId, pageSize);
-
             var mappedItems = _mapper.Map<List<LedModelDTO>>(repoPage.Items);
-            var resultList = new List<dynamic>();
+            var resultItems = new List<dynamic>();
             foreach (var item in mappedItems)
             {
-                resultList.Add(LED_MapToDynamic.MapToDynamic(item));
+                resultItems.Add(LED_MapToDynamic.MapToDynamic(item));
             }
-
-            // Return PagedResult<dynamic> with Items and reuse PageNumber to send lastId back (client should read last item's Id)
-            return new PagedResult<dynamic>
+            return new CursorPagedResult<dynamic>
             {
-                Items = resultList,
-                PageNumber = repoPage.PageNumber,
-                PageSize = repoPage.PageSize,
-                TotalCount = repoPage.TotalCount
+                Items = resultItems,
+                NextCursor = repoPage.NextCursor,    
+                HasNextPage = repoPage.HasNextPage,
+                PageSize = repoPage.PageSize
             };
         }
 
-        public async Task<PagedResult<dynamic>> GetLedModelsByDevice(string line, string devicename, int? lastId = null, int pageSize = 20)
+        public async Task<CursorPagedResult<dynamic>> GetLedModelsByDevice(string line, string devicename, int? lastId = null, int pageSize = 20)
         {
             int? lineId = await _LineRepository.GetIdByLineName(line);
             if (!lineId.HasValue)
@@ -79,21 +75,17 @@ namespace Infrastructure.Services.LED
             int? deviceId = await _LedRepository.GetDeviceIdByDeviceNameAndLineNameAsync(devicename, (int)lineId);
             if (!deviceId.HasValue)
                 throw new NotFoundException($"Device with name '{devicename}' in line '{line}' was not found.");
-
-            var repoPage = await _LedModelRepository.GetLedModelsByDeviceIdAsync((int)deviceId, lastId, pageSize);
-            var mappedItems = _mapper.Map<List<LedModelDTO>>(repoPage.Items);
-            var resultList = new List<dynamic>();
-            foreach (var item in mappedItems)
+            var repoResult = await _LedModelRepository.GetLedModelsByDeviceIdAsync((int)deviceId, lastId, pageSize);
+            var mappedItems = _mapper.Map<List<LedModelDTO>>(repoResult.Items);
+            var dynamicItems = mappedItems
+                .Select(item => LED_MapToDynamic.MapToDynamic(item))
+                .ToList();
+            return new CursorPagedResult<dynamic>
             {
-                resultList.Add(LED_MapToDynamic.MapToDynamic(item));
-            }
-
-            return new PagedResult<dynamic>
-            {
-                Items = resultList,
-                PageNumber = repoPage.PageNumber,
-                PageSize = repoPage.PageSize,
-                TotalCount = repoPage.TotalCount
+                Items = dynamicItems,
+                NextCursor = repoResult.NextCursor,
+                HasNextPage = repoResult.HasNextPage,
+                PageSize = repoResult.PageSize
             };
         }
 

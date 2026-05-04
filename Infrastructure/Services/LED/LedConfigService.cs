@@ -24,7 +24,7 @@ namespace Infrastructure.Services.LED
         public async Task<LedConfigDTO> AddLedConfigAsync(LedConfigDTO ledConfigDTO)
         {
             var led = await _ledRepository.GetDeviceNameByIdAsync(ledConfigDTO.LedId);
-            if(led == null)
+            if (led == null)
             {
                 throw new NotFoundException($"Led id: '{ledConfigDTO.ID}' was not found.");
             }
@@ -32,21 +32,24 @@ namespace Infrastructure.Services.LED
             return _mapper.Map<LedConfigDTO>(await _ledConfigRepository.AddLedModelAsync(ledConfig));
         }
 
-        public async Task<PagedResult<LedConfigResponse>> GetLedConfigByDeviceIdAsync(int deviceId, int? lastId = null, int pageSize = 20)
+        public async Task<CursorPagedResult<LedConfigResponse>> GetLedConfigByDeviceIdAsync(int deviceId, int? lastId = null, int pageSize = 20)
         {
             var led = await _ledRepository.GetDeviceNameByIdAsync(deviceId);
             if (led == null)
             {
                 throw new NotFoundException($"Led id: '{deviceId}' was not found.");
             }
+
             var repoPage = await _ledConfigRepository.GetLedConfigByDeviceIdAsync(deviceId, lastId, pageSize);
+
             var mappedItems = _mapper.Map<List<LedConfigResponse>>(repoPage.Items);
-            return new PagedResult<LedConfigResponse>
+
+            return new CursorPagedResult<LedConfigResponse>
             {
                 Items = mappedItems,
-                PageNumber = repoPage.PageNumber,
-                PageSize = repoPage.PageSize,
-                TotalCount = repoPage.TotalCount
+                NextCursor = repoPage.NextCursor,
+                HasNextPage = repoPage.HasNextPage,
+                PageSize = repoPage.PageSize
             };
         }
 
