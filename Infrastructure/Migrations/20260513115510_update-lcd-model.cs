@@ -5,14 +5,14 @@
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class add_scanner : Migration
+    public partial class updatelcdmodel : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "Scanner",
-                table: "LedConfig",
+                name: "Location_Capture_Point",
+                table: "LCDModel",
                 type: "longtext",
                 nullable: true)
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -22,8 +22,8 @@ namespace Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Scanner",
-                table: "LedConfig");
+                name: "Location_Capture_Point",
+                table: "LCDModel");
         }
     }
 }

@@ -1,10 +1,4 @@
-﻿using Domain.Enitties;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities.LED
 {
@@ -13,7 +7,7 @@ namespace Domain.Entities.LED
     {
         public int Id { get; set; }
         public string? Name { get; set; }
-        public string? LedDeviceId { get; set; }
+        public string? AssetId { get; set; }
         public int LineId { get; set; }
         public ICollection<LedModel> LedModels { get; set; }
         public DateTime CreateDate { get; set; }

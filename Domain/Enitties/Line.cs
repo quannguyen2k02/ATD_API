@@ -1,7 +1,6 @@
-﻿using Domain.Entities;
-using Domain.Entities.LED;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿
 
+using System.ComponentModel.DataAnnotations.Schema;
 namespace Domain.Enitties
 {
     [Table("Line")]
@@ -9,7 +8,8 @@ namespace Domain.Enitties
     {
         public int Id { get; set; }
         public string? Name { get; set; }
-        public ICollection<LED>? Leds { get; set; }
+        public ICollection<Domain.Entities.LED.LED>? Leds { get; set; }
+        public ICollection<Domain.Enitties.LCD.LCD>? LCDs { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime ModifiedDate { get; set; }
     }

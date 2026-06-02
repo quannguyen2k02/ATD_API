@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260421060015_add_date_time_ledconfig")]
-    partial class add_date_time_ledconfig
+    [Migration("20260511011541_delete-lcd")]
+    partial class deletelcd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -165,6 +165,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AssetId")
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime(6)");
@@ -335,6 +338,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("ScanError")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Scanner")
                         .HasColumnType("longtext");
 
                     b.Property<string>("StageCode_SFCS")

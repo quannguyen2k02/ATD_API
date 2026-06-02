@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260513115510_update-lcd-model")]
+    partial class updatelcdmodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -252,13 +255,10 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Bottom_Right")
                         .HasColumnType("longtext");
 
-                    b.Property<double?>("CT")
-                        .HasColumnType("double");
+                    b.Property<int?>("CT")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("DateTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("HardPen_Left_Down_Test_Point")
@@ -304,7 +304,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("SN")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("SoftPen_Left_Down_Test_Point")
                         .HasColumnType("longtext");
@@ -337,35 +337,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("LCDId");
 
-                    b.HasIndex("SN")
-                        .IsUnique();
-
                     b.ToTable("LCDResult");
-                });
-
-            modelBuilder.Entity("Domain.Enitties.LED.LedDeviceStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("LedDeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LedDeviceStatus");
                 });
 
             modelBuilder.Entity("Domain.Enitties.Line", b =>

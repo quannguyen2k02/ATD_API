@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -6,45 +7,36 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class add_device_status : Migration
+    public partial class addledstatus : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "DeviceStatus",
+                name: "LedDeviceStatus",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    LedDeviceId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Description = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    LEDId = table.Column<int>(type: "int", nullable: true)
+                    CreateDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DeviceStatus", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DeviceStatus_LED_LEDId",
-                        column: x => x.LEDId,
-                        principalTable: "LED",
-                        principalColumn: "Id");
+                    table.PrimaryKey("PK_LedDeviceStatus", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DeviceStatus_LEDId",
-                table: "DeviceStatus",
-                column: "LEDId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "DeviceStatus");
+                name: "LedDeviceStatus");
         }
     }
 }

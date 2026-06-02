@@ -1,11 +1,15 @@
 ﻿using Application.IRepositories;
+using Application.IRepositories.LCD;
 using Application.IRepositories.LED;
 using Application.IRepository.LED;
+using Application.IServices.LCD;
 using Application.IServices.LED;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
+using Infrastructure.Repositories.LCD;
 using Infrastructure.Repositories.LED;
 using Infrastructure.Services;
+using Infrastructure.Services.LCD;
 using Infrastructure.Services.LED;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -30,7 +34,18 @@ public static class DependencyInjection
         services.AddScoped<ILedConfigRepository, LedConfigRepository>();
         services.AddScoped<ILineRepository, LineRepository>();
         services.AddScoped<ILineService,LineService>();
-
+        services.AddScoped<ILedStatusRepository, LedStatusRepository>();
+        services.AddScoped<ILedStatusService, LedStatusService>();
+        ///<summary>
+        ///LCD injection
+        ///</summary>
+        services.AddScoped<ILCDModelRepository,LCDModelRepository>();
+        services.AddScoped<ILCDRepository, LCDRepository>();
+        services.AddScoped<ILCDModelService, LCDModelService>();
+        services.AddScoped<ILCDConfigService,LCDConfigService>();
+        services.AddScoped<ILCDConfigRepository, LCDConfigRepository>();
+        services.AddScoped<ILCDResultService, LCDResultService>();
+        services.AddScoped<ILCDResultRepository, LCDResultRepository>();
         return services;
     }
 }

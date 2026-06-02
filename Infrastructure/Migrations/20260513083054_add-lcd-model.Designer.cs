@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260424114859_add_device_status")]
-    partial class add_device_status
+    [Migration("20260513083054_add-lcd-model")]
+    partial class addlcdmodel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace Infrastructure.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Enitties.DeviceStatus", b =>
+            modelBuilder.Entity("Domain.Enitties.LCD.LCD", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,20 +33,308 @@ namespace Infrastructure.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
+                    b.Property<string>("AssetId")
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("LEDId")
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DeviceName")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("LineId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status")
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LineId");
+
+                    b.ToTable("LCD");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.LCD.LCDConfig", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Camera")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("HardPen_Pressure")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("LCDId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Light_Source")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Scan")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SoftPen_Pressure")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Test_Position_Pressure")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LEDId");
+                    b.HasIndex("LCDId");
 
-                    b.ToTable("DeviceStatus");
+                    b.ToTable("LCDConfig");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.LCD.LCDModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BlackEdge_Left_Down_Capture_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("BlackEdge_Left_Up_Capture_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("BlackEdge_Middle_Down_Capture_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("BlackEdge_Right_Down_Capture_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("BlackEdge_Right_Up_Capture_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Down_Edge_Limit")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("HardPen_Left_Down_Test_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("HardPen_Left_Up_Test_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("HardPen_Right_Down_Test_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("HardPen_Right_Up_Test_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("LCDId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Left_Edge_Limit")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Locating_Module_Start_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Location_Module_Claim_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ModelName")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Offset_Down_Edge")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Offset_Left_Edge")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Offset_Top_Edge")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Offset_Up_Edge")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_Edge_Limit")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Section_Module_Angle_90_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Section_Module_Finish_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Section_Module_Start_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Section_Module_Test_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Section_X_Start_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SoftPen_Left_Down_Test_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SoftPen_Left_Up_Test_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SoftPen_Right_Down_Test_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SoftPen_Right_Up_Test_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Space_Key_Middle_Test_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Space_Key_Middle_Test_Up_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Test_Module_Start_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Top_Edge_Limit")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LCDId");
+
+                    b.ToTable("LCDModel");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.LCD.LCDResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BlackEdge_Left_Down_Capture_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("BlackEdge_Left_Up_Capture_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("BlackEdge_Middle_Down_Capture_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("BlackEdge_Right_Down_Capture_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("BlackEdge_Right_Up_Capture_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Bottom_Deviation")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Bottom_Left")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Bottom_Middle")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Bottom_Right")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("CT")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("HardPen_Left_Down_Test_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("HardPen_Left_Up_Test_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("HardPen_Right_Up_Test_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("LCDId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Left_Bottom")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Left_Deviation")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Left_Top")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ModelName")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<double?>("Pressure")
+                        .HasColumnType("double");
+
+                    b.Property<string>("Result")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_Bottom")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_Deviation")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_Top")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SN")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SoftPen_Left_Down_Test_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SoftPen_Right_Down_Test_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SoftPen_Right_Up_Test_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Space_Key_Middle_Test_Point")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Space_Key_Middle_Test_Up")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TestItem")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Top_Deviation")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Top_Left")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Top_Right")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LCDId");
+
+                    b.ToTable("LCDResult");
                 });
 
             modelBuilder.Entity("Domain.Enitties.Line", b =>
@@ -189,6 +477,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AssetId")
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime(6)");
@@ -665,11 +956,40 @@ namespace Infrastructure.Migrations
                     b.ToTable("LedStatus");
                 });
 
-            modelBuilder.Entity("Domain.Enitties.DeviceStatus", b =>
+            modelBuilder.Entity("Domain.Enitties.LCD.LCD", b =>
                 {
-                    b.HasOne("Domain.Entities.LED.LED", null)
-                        .WithMany("deviceStatuses")
-                        .HasForeignKey("LEDId");
+                    b.HasOne("Domain.Enitties.Line", null)
+                        .WithMany("LCDs")
+                        .HasForeignKey("LineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Enitties.LCD.LCDConfig", b =>
+                {
+                    b.HasOne("Domain.Enitties.LCD.LCD", null)
+                        .WithMany("LCDConfigs")
+                        .HasForeignKey("LCDId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Enitties.LCD.LCDModel", b =>
+                {
+                    b.HasOne("Domain.Enitties.LCD.LCD", null)
+                        .WithMany("LCDModels")
+                        .HasForeignKey("LCDId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Enitties.LCD.LCDResult", b =>
+                {
+                    b.HasOne("Domain.Enitties.LCD.LCD", null)
+                        .WithMany("lCDResults")
+                        .HasForeignKey("LCDId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.LED.Job", b =>
@@ -733,8 +1053,19 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Enitties.LCD.LCD", b =>
+                {
+                    b.Navigation("LCDConfigs");
+
+                    b.Navigation("LCDModels");
+
+                    b.Navigation("lCDResults");
+                });
+
             modelBuilder.Entity("Domain.Enitties.Line", b =>
                 {
+                    b.Navigation("LCDs");
+
                     b.Navigation("Leds");
                 });
 
@@ -743,8 +1074,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("LedConfigs");
 
                     b.Navigation("LedModels");
-
-                    b.Navigation("deviceStatuses");
                 });
 
             modelBuilder.Entity("Domain.Entities.LED.LedCamera", b =>

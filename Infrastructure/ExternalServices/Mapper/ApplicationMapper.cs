@@ -1,8 +1,12 @@
-﻿using Application.DTOs.RequestDTOs.LED;
+﻿using Application.DTOs.RequestDTOs.LCD;
+using Application.DTOs.RequestDTOs.LED;
 using Application.DTOs.ResponseDTOs;
+using Application.DTOs.ResponseDTOs.LCD;
 using Application.DTOs.ResponseDTOs.LED;
 using AutoMapper;
 using Domain.Enitties;
+using Domain.Enitties.LCD;
+using Domain.Enitties.LED;
 using Domain.Entities.LED;
 namespace Infrastructure.ExternalServices.Mapper
 {
@@ -10,6 +14,10 @@ namespace Infrastructure.ExternalServices.Mapper
     {
         public ApplicationMapper() 
         {
+            CreateMap<LedDeviceStatusRequest, LedDeviceStatus>();
+            CreateMap<LedDeviceStatus, LedDeviceStatusRequest>();
+            CreateMap<LedDeviceStatus, LedDeviceStatusResponse>();
+            CreateMap<LedDeviceStatusResponse, LedDeviceStatus>();
             CreateMap<LED, LEDDTO>();
             CreateMap<Job, JobDTO>();
             CreateMap<LedCamera, LedCameraDTO>();
@@ -20,6 +28,7 @@ namespace Infrastructure.ExternalServices.Mapper
             CreateMap<LedConfig, LedConfigDTO>();
             CreateMap<LedConfig, LedConfigResponse>();
             CreateMap<LedConfig, LedConfigResponse>()
+            
             // Map cameras by combining value and status
             .ForMember(dest => dest.Camera1, opt => opt.MapFrom(src => CombineWithUnderscore(src.Camera1, src.Camera1_Status)))
             .ForMember(dest => dest.Camera2, opt => opt.MapFrom(src => CombineWithUnderscore(src.Camera2, src.Camera2_Status)))
@@ -44,6 +53,21 @@ namespace Infrastructure.ExternalServices.Mapper
             CreateMap<LineDTO, Line>();
             CreateMap<LedConfigDTO, LedConfig>();
 
+            /// <summary>
+            /// Mapping for LCD
+            /// </summary>
+            CreateMap<LCDModel, ResponseLCDModel>();
+            CreateMap<ResponseLCDModel, LCDModel>();
+            CreateMap<LCDModel, RequestLCDModel>();
+            CreateMap<RequestLCDModel, LCDModel>();
+            CreateMap<LCDConfig, ResponseLCDConfig>();
+            CreateMap<ResponseLCDConfig, LCDConfig>();
+            CreateMap<LCDConfig, RequestLCDConfig>();
+            CreateMap<RequestLCDConfig, LCDConfig>();
+            CreateMap<RequestLCDResult, LCDResult>();
+            CreateMap<LCDResult, RequestLCDResult>();
+            CreateMap<ResponseLCDResult, LCDResult>();
+            CreateMap<LCDResult, ResponseLCDResult>();
         }
         private static string CombineWithUnderscore(params string?[] parts)
         {
