@@ -14,6 +14,10 @@ namespace Infrastructure.ExternalServices.Mapper
     {
         public ApplicationMapper() 
         {
+            CreateMap<LedResult, LedResultRequest>();
+            CreateMap<LedResultRequest, LedResult>();
+            CreateMap<LedResult, LedResultResponse>();
+            CreateMap<LedResultResponse, LedResult>();
             CreateMap<LedDeviceStatusRequest, LedDeviceStatus>();
             CreateMap<LedDeviceStatus, LedDeviceStatusRequest>();
             CreateMap<LedDeviceStatus, LedDeviceStatusResponse>();

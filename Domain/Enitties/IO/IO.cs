@@ -1,7 +1,9 @@
 ﻿using Domain.Enitties.LCD;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Enitties.IO
 {
+    [Table("IO")]
     public class IO
     {
         public int Id { get; set; }
@@ -10,8 +12,6 @@ namespace Domain.Enitties.IO
         public string? DeviceName { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime ModifiedDate { get; set; }
-        public ICollection<LCDModel>? LCDModels { get; set; }
-        public ICollection<LCDConfig>? LCDConfigs { get; set; }
-        public ICollection<LCDResult>? lCDResults { get; set; }
+        public ICollection<IOModel>? IOModels { get; set; }
     }
 }

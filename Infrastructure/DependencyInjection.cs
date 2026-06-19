@@ -26,6 +26,9 @@ public static class DependencyInjection
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
             }
         });
+        ///<summary>
+        ///LED injection
+        ///</summary>
         services.AddScoped<ILedRepository, LedRepository>();
         services.AddScoped<ILineRepository, LineRepository>();
         services.AddScoped<ILedModelRepository, LedModelRepository>();
@@ -36,6 +39,8 @@ public static class DependencyInjection
         services.AddScoped<ILineService,LineService>();
         services.AddScoped<ILedStatusRepository, LedStatusRepository>();
         services.AddScoped<ILedStatusService, LedStatusService>();
+        services.AddScoped<ILedResultService, LedResultService>();
+        services.AddScoped<ILedResultRepository, LedResultRepository>();
         ///<summary>
         ///LCD injection
         ///</summary>

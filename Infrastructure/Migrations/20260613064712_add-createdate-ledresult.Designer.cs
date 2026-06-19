@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260514055230_fix-lcdresult")]
-    partial class fixlcdresult
+    [Migration("20260613064712_add-createdate-ledresult")]
+    partial class addcreatedateledresult
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -261,6 +261,9 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<DateTime?>("DateTime")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("HardPen_Left_Down_Test_Point")
                         .HasColumnType("longtext");
 
@@ -341,6 +344,106 @@ namespace Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("LCDResult");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.LED.LedDeviceStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("LedDeviceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LedDeviceStatus");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.LED.LedResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CT")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Caps")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Charge_White")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Charge_Yellow")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Close_Caps")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Close_F4")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Close_Num")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("F4")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("KBLight")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("KB_Close")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("LEDId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModelName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("N_Camera")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Num")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Power")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Result")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SN")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TypeModel")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LEDId");
+
+                    b.ToTable("LedResult");
                 });
 
             modelBuilder.Entity("Domain.Enitties.Line", b =>
@@ -998,6 +1101,15 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Enitties.LED.LedResult", b =>
+                {
+                    b.HasOne("Domain.Entities.LED.LED", null)
+                        .WithMany("LedResults")
+                        .HasForeignKey("LEDId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.LED.Job", b =>
                 {
                     b.HasOne("Domain.Entities.LED.LedStatus", null)
@@ -1080,6 +1192,8 @@ namespace Infrastructure.Migrations
                     b.Navigation("LedConfigs");
 
                     b.Navigation("LedModels");
+
+                    b.Navigation("LedResults");
                 });
 
             modelBuilder.Entity("Domain.Entities.LED.LedCamera", b =>

@@ -3,6 +3,7 @@ using Application.IRepositories.LCD;
 using Application.IServices.LCD;
 using AutoMapper;
 using Domain.Enitties.LCD;
+using Infrastructure.Exceptions;
 
 namespace Infrastructure.Services.LCD
 {
@@ -20,7 +21,11 @@ namespace Infrastructure.Services.LCD
         public async Task<(int inserted, int skipped)> AddBatchAsync(IEnumerable<RequestLCDResult> batch)
         {
             var list = batch.ToList(); // ToList để tránh nhiều enumeration
-
+            var device = _lcdRepository.GetLCDById(list.FirstOrDefault()?.LCDId ?? 0).Result;
+            if (device == null)
+            {
+                throw new NotFoundException($"LCD device with ID {list.FirstOrDefault()?.LCDId} not found.");
+            }
             // Loại bỏ các bản ghi trùng SN trong cùng batch (giữ lại bản ghi đầu tiên theo thứ tự)
             var distinctBySN = list
                 .GroupBy(x => x.SN)
