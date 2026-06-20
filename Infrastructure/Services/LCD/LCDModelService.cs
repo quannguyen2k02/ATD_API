@@ -21,7 +21,7 @@ namespace Infrastructure.Services.LCD
         }
         public async Task<ResponseLCDModel> AddNewLCDModelAsync(RequestLCDModel model)
         {
-            var lcd = await _lcdRepository.GetLCDById(model.LCDId);
+            var lcd = await _lcdRepository.GetByIDAsync(model.LCDId);
             if(lcd == null)
             {
                 throw new NotFoundException($"LCD with id '{model.Id}' was not found.");
@@ -30,12 +30,12 @@ namespace Infrastructure.Services.LCD
             model.CreateDate = DateTime.Now;
             model.ModifiedDate = DateTime.Now;
             var lcdModel = _mapper.Map<Domain.Enitties.LCD.LCDModel>(model);
-            return _mapper.Map<ResponseLCDModel>(await _lcdModelRepository.AddNewLCDModelAsync(lcdModel));
+            return _mapper.Map<ResponseLCDModel>(await _lcdModelRepository.Add(lcdModel));
         }
 
         public async Task<CursorPagedResult<ResponseLCDModel>> GetLCDModelsByDeviceIdAsync(int deviceId, int? lastId = null, int pageSize = 20)
         {
-            var lcd = await _lcdRepository.GetLCDById(deviceId);
+            var lcd = await _lcdRepository.GetByIDAsync(deviceId);
             if (lcd == null)
             {
                 throw new NotFoundException($"LCD with id '{deviceId}' was not found.");
@@ -52,7 +52,7 @@ namespace Infrastructure.Services.LCD
 
         public async Task<CursorPagedResult<ResponseLCDModel>> GetLCDModelsByModelNameAsync(string modelName, int deviceId, int? lastId = null, int pageSize = 20)
         {
-            var lcd = await _lcdRepository.GetLCDById(deviceId);
+            var lcd = await _lcdRepository.GetByIDAsync(deviceId);
             if (lcd == null)
             {
                 throw new NotFoundException($"LCD with id '{deviceId}' was not found.");

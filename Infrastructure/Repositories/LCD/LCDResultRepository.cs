@@ -6,12 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories.LCD
 {
-    public class LCDResultRepository : ILCDResultRepository
+    public class LCDResultRepository : GenericRepository<LCDResult>, ILCDResultRepository
     {
-        private readonly ApplicationDbContext _context;
-        public LCDResultRepository(ApplicationDbContext context)
+        public LCDResultRepository(ApplicationDbContext context):base(context)
         {
-            _context = context;
         }
         public async Task AddRangeAsync(IEnumerable<LCDResult> results)
         {

@@ -1,15 +1,12 @@
 ﻿using Application.IRepository.LED;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-
 namespace Infrastructure.Repositories.LED
 {
-    public class LedRepository : ILedRepository
+    public class LedRepository : GenericRepository<Domain.Entities.LED.LED>, ILedRepository
     {
-        private readonly ApplicationDbContext _context;
-        public LedRepository(ApplicationDbContext context)
+        public LedRepository(ApplicationDbContext context):base(context)
         {
-            _context = context;
         }
 
         public async Task<int?> GetDeviceIdByDeviceNameAndLineNameAsync(string deviceName, int lineId)

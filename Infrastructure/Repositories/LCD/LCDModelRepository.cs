@@ -8,19 +8,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories.LCD
 {
-    public class LCDModelRepository : ILCDModelRepository
+    public class LCDModelRepository : GenericRepository<LCDModel>, ILCDModelRepository
     {
-        private readonly ApplicationDbContext _context;
-        public LCDModelRepository(ApplicationDbContext context)
+        public LCDModelRepository(ApplicationDbContext context):base(context)
         {
-            _context = context;
         }
-        public async Task<LCDModel> AddNewLCDModelAsync(LCDModel model)
-        {
-            await _context.LCDModels.AddAsync(model);
-            await _context.SaveChangesAsync();
-            return model;
-        }
+
 
         public async Task<CursorPagedResult<LCDModel>> GetLCDModelsByDeviceIdAsync(int deviceId, int? lastId = null, int pageSize = 20)
         {

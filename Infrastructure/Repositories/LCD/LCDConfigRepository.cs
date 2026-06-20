@@ -6,24 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories.LCD
 {
-    public class LCDConfigRepository : ILCDConfigRepository
+    public class LCDConfigRepository : GenericRepository<LCDConfig>, ILCDConfigRepository
     {
-        private readonly ApplicationDbContext _context;
-        public LCDConfigRepository(ApplicationDbContext context)
+        public LCDConfigRepository(ApplicationDbContext context):base(context)
         {
-            _context = context;
-        }
-        public async Task<LCDConfig> AddLCDConfigAsync(LCDConfig model)
-        {
-            await _context.LCDConfigs.AddAsync(model);
-            await _context.SaveChangesAsync();
-            return model;
-        }
-
-        public async Task<LCDConfig> GetLCDConfigByIdAsync(int id)
-        {
-            var lcdConfig = await _context.LCDConfigs.FindAsync(id);
-            return lcdConfig;
         }
 
         public async Task<CursorPagedResult<LCDConfig>> GetLCDConfigsByDeviceIdAsync(

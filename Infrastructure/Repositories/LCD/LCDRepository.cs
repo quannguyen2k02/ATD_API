@@ -1,19 +1,15 @@
 ﻿using Application.IRepositories.LCD;
+using Domain.Enitties.LCD;
 using Infrastructure.Data;
 
 namespace Infrastructure.Repositories.LCD
 {
-    public class LCDRepository : ILCDRepository
+    public class LCDRepository : GenericRepository<Domain.Enitties.LCD.LCD>, ILCDRepository
     {
-        private readonly ApplicationDbContext _context;
-        public LCDRepository(ApplicationDbContext context)
+        public LCDRepository(ApplicationDbContext context):base(context)
         {
-            _context = context;
+
         } 
-        public async Task<Domain.Enitties.LCD.LCD> GetLCDById(int id)
-        {
-            var lcd = await _context.LCDs.FindAsync(id);
-            return lcd;
-        }
+
     }
 }

@@ -7,12 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories.LED
 {
-    public class LedResultRepository : ILedResultRepository
+    public class LedResultRepository : GenericRepository<LedResult>, ILedResultRepository
     {
-        private readonly ApplicationDbContext _context;
-        public LedResultRepository(ApplicationDbContext context)
+
+        public LedResultRepository(ApplicationDbContext context):base(context)
         {
-            _context = context;
         }
         public async Task AddBatchLedResult(IEnumerable<LedResult> ledResults)
         {

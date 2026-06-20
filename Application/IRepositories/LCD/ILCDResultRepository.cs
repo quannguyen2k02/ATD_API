@@ -3,7 +3,7 @@ using Domain.Enitties.LCD;
 
 namespace Application.IRepositories.LCD
 {
-    public interface ILCDResultRepository
+    public interface ILCDResultRepository:IGenericRepository<LCDResult>
     {
         public Task<IEnumerable<string>> GetExistingSNsAsync(IEnumerable<string> sns);
         public Task AddRangeAsync(IEnumerable<LCDResult> results);

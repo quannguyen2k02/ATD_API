@@ -37,7 +37,7 @@ namespace Infrastructure.Services.LED
             }
             ledModelDTO.LedId = (int)deviceId;
             var ledModel = _mapper.Map<LedModel>(ledModelDTO);
-            return _mapper.Map<LedModelDTO>(await _LedModelRepository.AddLedModelAsync(ledModel));
+            return _mapper.Map<LedModelDTO>(await _LedModelRepository.Add(ledModel));
         }
 
         public async Task<CursorPagedResult<dynamic>> GetLedModelAsync(string line, string devicename, string model, string kb, string fp, int? lastId = null, int pageSize = 20)
@@ -91,7 +91,7 @@ namespace Infrastructure.Services.LED
 
         public async Task<dynamic> GetLedModelById(int id)
         {
-            var model = await _LedModelRepository.GetLedModelById(id);
+            var model = await _LedModelRepository.GetByIDAsync(id);
             if (model == null)
                 throw new NotFoundException($"Model with ID {id} was not found!");
             var mapped = _mapper.Map<LedModelDTO>(model);

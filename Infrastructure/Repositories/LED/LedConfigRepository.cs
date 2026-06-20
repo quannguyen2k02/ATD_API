@@ -6,22 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories.LED
 {
-    public class LedConfigRepository : ILedConfigRepository
+    public class LedConfigRepository :GenericRepository<LedConfig>,  ILedConfigRepository
     {
-        private readonly ApplicationDbContext _context;
-        public LedConfigRepository(ApplicationDbContext context)
+        public LedConfigRepository(ApplicationDbContext context) :base(context)
         {
-            _context = context;
         }
-        public async Task<LedConfig> AddLedModelAsync(LedConfig ledConfig)
-        {
-            ledConfig.CreateDate = DateTime.Now;
-            ledConfig.ModifiedDate = DateTime.Now;
-            await _context.LedConfigs.AddAsync(ledConfig);
-            await _context.SaveChangesAsync();
-            return ledConfig;
 
-        }
 
         public async Task<CursorPagedResult<LedConfig>> GetLedConfigByDeviceIdAsync(int deviceId, int? lastId = null, int pageSize = 20)
         {

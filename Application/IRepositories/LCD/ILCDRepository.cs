@@ -1,9 +1,8 @@
 ﻿
 namespace Application.IRepositories.LCD
 {
-    public interface ILCDRepository
+    public interface ILCDRepository : IGenericRepository<Domain.Enitties.LCD.LCD>
     {
-        public Task<Domain.Enitties.LCD.LCD> GetLCDById(int id);
 
     }
 }

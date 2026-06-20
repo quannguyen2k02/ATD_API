@@ -29,7 +29,7 @@ namespace Infrastructure.Services.LED
                 throw new NotFoundException($"Led id: '{ledConfigDTO.ID}' was not found.");
             }
             var ledConfig = _mapper.Map<LedConfig>(ledConfigDTO);
-            return _mapper.Map<LedConfigDTO>(await _ledConfigRepository.AddLedModelAsync(ledConfig));
+            return _mapper.Map<LedConfigDTO>(await _ledConfigRepository.Add(ledConfig));
         }
 
         public async Task<CursorPagedResult<LedConfigResponse>> GetLedConfigByDeviceIdAsync(int deviceId, int? lastId = null, int pageSize = 20)

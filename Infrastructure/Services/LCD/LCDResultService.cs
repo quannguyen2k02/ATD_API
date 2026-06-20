@@ -21,7 +21,7 @@ namespace Infrastructure.Services.LCD
         public async Task<(int inserted, int skipped)> AddBatchAsync(IEnumerable<RequestLCDResult> batch)
         {
             var list = batch.ToList(); // ToList để tránh nhiều enumeration
-            var device = _lcdRepository.GetLCDById(list.FirstOrDefault()?.LCDId ?? 0).Result;
+            var device = _lcdRepository.GetByIDAsync(list.FirstOrDefault()?.LCDId ?? 0).Result;
             if (device == null)
             {
                 throw new NotFoundException($"LCD device with ID {list.FirstOrDefault()?.LCDId} not found.");

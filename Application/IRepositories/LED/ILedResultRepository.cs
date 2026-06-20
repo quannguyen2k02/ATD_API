@@ -4,7 +4,7 @@ using Domain.Enitties.LED;
 
 namespace Application.IRepositories.LED
 {
-    public interface ILedResultRepository
+    public interface ILedResultRepository : IGenericRepository<LedResult>
     {
         public Task AddBatchLedResult(IEnumerable<LedResult> ledResults);
         public Task<IEnumerable<string>> GetExistingSNsAsync(IEnumerable<string> sns);

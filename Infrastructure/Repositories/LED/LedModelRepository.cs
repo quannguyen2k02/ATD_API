@@ -6,26 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories.LED
 {
-    public class LedModelRepository : ILedModelRepository
+    public class LedModelRepository : GenericRepository<LedModel> , ILedModelRepository
     {
-        private readonly ApplicationDbContext _context;
-        public LedModelRepository(ApplicationDbContext context)
+        public LedModelRepository(ApplicationDbContext context):base(context)
         {
-            _context = context;
-        }
-
-        public Task<LedModelConfig> AddLedModelConfig(LedModelConfig ledModelConfig)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<LedModel> AddLedModelAsync(LedModel ledModel)
-        {
-            ledModel.CreateDate = DateTime.Now;
-            ledModel.ModifiedDate = DateTime.Now;
-            await _context.LEDModels.AddAsync(ledModel);
-            await _context.SaveChangesAsync();
-            return ledModel;
         }
 
         public async Task<CursorPagedResult<LedModel>> GetLedModelAsync(int deviceId, string model, string kb, string fp, int? lastId = null, int pageSize = 20)
@@ -106,11 +90,5 @@ namespace Infrastructure.Repositories.LED
             };
         }
 
-        public async Task<LedModel> GetLedModelById(int id)
-        {
-            var ledModel = await _context.LEDModels
-                .FindAsync(id);
-            return ledModel;
-        }
     }
 }

@@ -2,8 +2,7 @@
 
 namespace Application.IRepositories.LED
 {
-    public interface ILedStatusRepository
+    public interface ILedStatusRepository:IGenericRepository<LedDeviceStatus>
     {
-        public Task<LedDeviceStatus> AddNewStatus(LedDeviceStatus ledDeviceStatus);
     }
 }
