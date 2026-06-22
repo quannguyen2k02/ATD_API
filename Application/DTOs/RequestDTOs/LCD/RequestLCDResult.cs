@@ -36,7 +36,7 @@
         public string? Right_Top { get; set; }
         public string? Right_Bottom { get; set; }
         public string? Right_Deviation { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }  = System.DateTime.Now;
         public DateTime ModifiedDate { get; set; }
     }
 }

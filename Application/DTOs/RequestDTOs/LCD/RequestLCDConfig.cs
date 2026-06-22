@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Application.DTOs.RequestDTOs.LCD
+﻿namespace Application.DTOs.RequestDTOs.LCD
 {
     public class RequestLCDConfig
     {
@@ -16,7 +10,7 @@ namespace Application.DTOs.RequestDTOs.LCD
         public string? SoftPen_Pressure { get; set; }
         public string? HardPen_Pressure { get; set; }
         public string? Test_Position_Pressure { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.Now;
         public DateTime ModifiedDate { get; set; }
     }
 }

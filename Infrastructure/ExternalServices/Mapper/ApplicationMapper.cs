@@ -23,6 +23,8 @@ namespace Infrastructure.ExternalServices.Mapper
             CreateMap<LedDeviceStatus, LedDeviceStatusResponse>();
             CreateMap<LedDeviceStatusResponse, LedDeviceStatus>();
             CreateMap<LED, LEDDTO>();
+            CreateMap<LED, LedResponse>();
+            CreateMap<LedResponse, LED>();
             CreateMap<Job, JobDTO>();
             CreateMap<LedCamera, LedCameraDTO>();
             CreateMap<LedModel, LedModelDTO>();

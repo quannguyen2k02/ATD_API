@@ -11,5 +11,6 @@ namespace Application.IRepository.LED
     {
         public Task<int?> GetDeviceIdByDeviceNameAndLineNameAsync(string deviceName, int lineId);
         public Task<string?> GetDeviceNameByIdAsync(int id);
+        public Task<List<Domain.Entities.LED.LED>> GetLedsByLineId(int lineId);
     }
 }

@@ -15,7 +15,7 @@ namespace Application.DTOs.RequestDTOs.LED
         public ICollection<JobDTO>? Jobs { get; set; }
         [JsonIgnore]
 
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.Now;
         [JsonIgnore]
 
         public DateTime ModifiedDate { get; set; }

@@ -37,6 +37,7 @@ namespace Infrastructure.Services.LED
             }
             ledModelDTO.LedId = (int)deviceId;
             var ledModel = _mapper.Map<LedModel>(ledModelDTO);
+            
             return _mapper.Map<LedModelDTO>(await _LedModelRepository.Add(ledModel));
         }
 

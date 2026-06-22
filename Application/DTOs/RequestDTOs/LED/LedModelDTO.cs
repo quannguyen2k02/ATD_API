@@ -26,9 +26,9 @@ namespace Application.DTOs.RequestDTOs.LED
         public ICollection<LedCameraDTO>? Cameras { get; set; }
         [JsonIgnore]
 
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.Now;
         [JsonIgnore]
 
-        public DateTime ModifiedDate { get; set; }
+        public DateTime ModifiedDate { get; set; } = DateTime.Now;
     }
 }

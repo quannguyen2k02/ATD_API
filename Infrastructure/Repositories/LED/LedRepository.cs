@@ -1,6 +1,7 @@
 ﻿using Application.IRepository.LED;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+
 namespace Infrastructure.Repositories.LED
 {
     public class LedRepository : GenericRepository<Domain.Entities.LED.LED>, ILedRepository
@@ -18,6 +19,11 @@ namespace Infrastructure.Repositories.LED
         {
             return await _context.LEDs.Where(x=>x.Id == id).Select(x=>x.Name).FirstOrDefaultAsync();
 
+        }
+
+        public async Task<List<Domain.Entities.LED.LED>> GetLedsByLineId(int lineId)
+        {
+            return await _context.LEDs.Where(x => x.LineId == lineId).ToListAsync();
         }
     }
 }

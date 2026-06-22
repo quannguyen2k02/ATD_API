@@ -88,7 +88,7 @@ namespace Application.DTOs.RequestDTOs.LED
         public string? ReadSPKResultStatus5 { get; set; }
         [JsonIgnore]
 
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.Now;
         [JsonIgnore]
 
         public DateTime ModifiedDate { get; set; }

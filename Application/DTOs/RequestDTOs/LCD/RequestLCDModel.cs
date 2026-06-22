@@ -48,7 +48,7 @@ namespace Application.DTOs.RequestDTOs.LCD
         public string? Offset_Left_Edge { get; set; }
         public string? Offset_Down_Edge { get; set; }
         public string? Offset_Up_Edge { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.Now;
         public DateTime ModifiedDate { get; set; }
     }
 }

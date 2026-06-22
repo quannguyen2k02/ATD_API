@@ -41,6 +41,8 @@ public static class DependencyInjection
         services.AddScoped<ILedStatusService, LedStatusService>();
         services.AddScoped<ILedResultService, LedResultService>();
         services.AddScoped<ILedResultRepository, LedResultRepository>();
+        services.AddScoped<ILedRepository, LedRepository>();
+        services.AddScoped<ILedService, LedService>();
         ///<summary>
         ///LCD injection
         ///</summary>
@@ -51,8 +53,6 @@ public static class DependencyInjection
         services.AddScoped<ILCDConfigRepository, LCDConfigRepository>();
         services.AddScoped<ILCDResultService, LCDResultService>();
         services.AddScoped<ILCDResultRepository, LCDResultRepository>();
-        services.AddScoped<ILCDResultDemoService, LCDResultDemoService>();
-        services.AddScoped<ILCDResultDemoRepository, LCDResultDemoRepository>();
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         return services;
     }
