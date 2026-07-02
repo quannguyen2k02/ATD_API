@@ -15,6 +15,7 @@ namespace Domain.Entities.LED
         public int LedCameraId { get; set; }
         public string? Name { get; set; }
         public ICollection<Job>? Jobs { get; set; }
+        public virtual LedCamera? LedCamera { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime ModifiedDate { get; set; }
     }

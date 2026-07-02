@@ -29,6 +29,7 @@ namespace Infrastructure.Services.LED
             {
                 throw new Exception($"LED device with ID {ledDeviceStatusRequest.LedDeviceId} not found.");
             }
+            ledDeviceStatusRequest.CreateDate = DateTime.Now;
             var ledStatus = _mapper.Map<LedDeviceStatus>(ledDeviceStatusRequest);
             return _mapper.Map<LedDeviceStatusResponse>(await _ledStatusRepository.Add(ledStatus));
         }

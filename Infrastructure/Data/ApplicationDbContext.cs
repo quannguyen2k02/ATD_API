@@ -1,4 +1,6 @@
 ﻿using Domain.Enitties;
+using Domain.Enitties.ChangeLog;
+using Domain.Enitties.IO;
 using Domain.Enitties.LCD;
 using Domain.Enitties.LED;
 using Domain.Entities.LED;
@@ -32,6 +34,21 @@ namespace Infrastructure.Data
         public DbSet<LCDModel> LCDModels { get; set; }
         public DbSet<LCDConfig> LCDConfigs { get; set; }
         public DbSet<LCDResult> LCDResults { get; set; }
+        ///> <summary>
+        ///Log change Set
+        ///
+        public DbSet<LEDLog> LEDLogs { get; set; }
 
+        ///<summary>
+        ///IO DB Set
+        /// </summary>
+        public DbSet<IO> IOs { get; set; }
+        public DbSet<IOConfig> IOConfigs { get; set; }
+        public DbSet<IOConfigManagement> IOConfigManagements { get; set; }
+        public DbSet<IOModel> IOModels { get; set; }
+        public DbSet<MotionPoint> MotionPoints { get; set; }
+        public DbSet<MotionPointsManagement> MotionPointsManagements { get; set; }
+        public DbSet<Offset> Offsets { get; set; }
+        public DbSet<OffsetManagement> OffsetManagements { get; set; }
     }
 }

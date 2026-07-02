@@ -1,4 +1,5 @@
-﻿using Domain.Enitties.LED;
+﻿using Domain.Enitties.ChangeLog;
+using Domain.Enitties.LED;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities.LED
@@ -15,5 +16,6 @@ namespace Domain.Entities.LED
         public DateTime ModifiedDate { get; set; }
         public ICollection<LedConfig>? LedConfigs { get; set; }
         public ICollection<LedResult>? LedResults { get; set; }
+        public ICollection<LEDLog>? lEDLogs { get; set; }
     }
 }

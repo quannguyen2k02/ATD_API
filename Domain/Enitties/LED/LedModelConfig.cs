@@ -88,6 +88,7 @@ namespace Domain.Entities.LED
         public string? ReadSPKResultStatus3 { get; set; }
         public string? ReadSPKResultStatus4 { get; set; }
         public string? ReadSPKResultStatus5 { get; set; }
+        public virtual LedModel? LedModel { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime ModifiedDate { get; set; }
 

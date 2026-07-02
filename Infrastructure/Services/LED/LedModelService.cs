@@ -2,9 +2,11 @@
 using Application.Common;
 using Application.DTOs.RequestDTOs.LED;
 using Application.IRepositories;
+using Application.IRepositories.ChangeLog;
 using Application.IRepository.LED;
 using Application.IServices.LED;
 using AutoMapper;
+using Domain.Enitties.ChangeLog;
 using Domain.Entities.LED;
 using Infrastructure.Exceptions;
 using Infrastructure.ExternalServices.Mapper;
@@ -17,12 +19,14 @@ namespace Infrastructure.Services.LED
         private readonly ILedRepository _LedRepository;
         private readonly ILineRepository _LineRepository;
         private readonly IMapper _mapper;
-        public LedModelService(ILedModelRepository ledModelRepository, IMapper mapper, ILedRepository ledRepository, ILineRepository lineRepository)
+        private readonly ILedLogRepository _LedLogRepository;
+        public LedModelService(ILedModelRepository ledModelRepository, IMapper mapper, ILedRepository ledRepository, ILineRepository lineRepository, ILedLogRepository ledLogRepository)
         {
             _LedModelRepository = ledModelRepository;
             _mapper = mapper;
             _LedRepository = ledRepository;
             _LineRepository = lineRepository;
+            _LedLogRepository = ledLogRepository;
         }
         public async Task<LedModelDTO> AddLedModelAsync(LedModelDTO ledModelDTO)
         {
@@ -35,6 +39,8 @@ namespace Infrastructure.Services.LED
             {
                 throw new NotFoundException($"Device with name '{ledModelDTO.DeviceName}' was not found.");
             }
+            LEDLog ledLog = new LEDLog((int)deviceId, ledModelDTO.Name, ledModelDTO.KB, ledModelDTO.FP);
+            await _LedLogRepository.Add(ledLog);
             ledModelDTO.LedId = (int)deviceId;
             var ledModel = _mapper.Map<LedModel>(ledModelDTO);
             

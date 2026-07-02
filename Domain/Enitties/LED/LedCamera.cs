@@ -9,6 +9,8 @@ namespace Domain.Entities.LED
         public int? LedModelId { get; set; }
         public string? Name { get; set; }
         public ICollection<LedStatus> LedStatuses { get; set; }
+        public virtual LedModel? LedModel { get; set; }
+
         public DateTime CreateDate { get; set; }
         public DateTime ModifiedDate { get; set; }
     }

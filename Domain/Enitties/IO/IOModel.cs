@@ -6,8 +6,11 @@ namespace Domain.Enitties.IO
     public class IOModel
     {
         public int Id { get; set; }
-        public int LineId { get; set; }
-        public string ModelName { get; set; }
+        public int? IOId { get; set; }
+        public string? ModelName { get; set; }
+        public ICollection<OffsetManagement>? OffsetManagements { get; set; }
+        public ICollection<IOConfigManagement>? ConfigManagements { get; set; }
+        public ICollection<MotionPointsManagement>? MotionPointsManagements { get; set; }
         public DateTime CreateDate { get; set; }
     }
 }

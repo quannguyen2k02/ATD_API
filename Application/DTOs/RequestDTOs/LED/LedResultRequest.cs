@@ -20,7 +20,7 @@
         public string? KBLight { get; set; }
         public string? KB_Close { get; set; }
         public string? Power { get; set; }
-        public DateTime DateTime { get; set; }
+        public DateTime DateTime { get; set; } = DateTime.Now;
 
     }
 }
