@@ -9,6 +9,5 @@ namespace Application.IRepositories.LED
         public Task AddBatchLedResult(IEnumerable<LedResult> ledResults);
         public Task<IEnumerable<string>> GetExistingSNsAsync(IEnumerable<string> sns);
         public Task<CursorPagedResult<LCDResult>> GetLedResultsByDeviceIdAsync(int deviceId, int? lastId = null, int pageSize = 20);
-
     }
 }

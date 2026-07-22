@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260702075459_fix-io-line")]
+    partial class fixioline
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -177,53 +180,50 @@ namespace Infrastructure.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BackX")
-                        .HasColumnType("longtext");
+                    b.Property<double>("BackX")
+                        .HasColumnType("double");
 
-                    b.Property<string>("BackY")
-                        .HasColumnType("longtext");
+                    b.Property<double>("BackY")
+                        .HasColumnType("double");
 
-                    b.Property<string>("BackZ")
-                        .HasColumnType("longtext");
+                    b.Property<double>("BackZ")
+                        .HasColumnType("double");
 
-                    b.Property<string>("HoldX")
-                        .HasColumnType("longtext");
+                    b.Property<double>("HoldX")
+                        .HasColumnType("double");
 
-                    b.Property<string>("HoldY")
-                        .HasColumnType("longtext");
+                    b.Property<double>("HoldY")
+                        .HasColumnType("double");
 
-                    b.Property<string>("HoldZ")
-                        .HasColumnType("longtext");
+                    b.Property<double>("HoldZ")
+                        .HasColumnType("double");
 
-                    b.Property<string>("LeftX")
-                        .HasColumnType("longtext");
+                    b.Property<double>("LeftX")
+                        .HasColumnType("double");
 
-                    b.Property<string>("LeftY")
-                        .HasColumnType("longtext");
+                    b.Property<double>("LeftY")
+                        .HasColumnType("double");
 
-                    b.Property<string>("LeftZ")
-                        .HasColumnType("longtext");
+                    b.Property<double>("LeftZ")
+                        .HasColumnType("double");
 
-                    b.Property<string>("MaxVel")
-                        .HasColumnType("longtext");
+                    b.Property<double>("MaxVel")
+                        .HasColumnType("double");
 
                     b.Property<int>("MotionPointsManagementId")
                         .HasColumnType("int");
 
-                    b.Property<string>("MotionPointsName")
-                        .HasColumnType("longtext");
+                    b.Property<double>("RightX")
+                        .HasColumnType("double");
 
-                    b.Property<string>("RightX")
-                        .HasColumnType("longtext");
+                    b.Property<double>("RightY")
+                        .HasColumnType("double");
 
-                    b.Property<string>("RightY")
-                        .HasColumnType("longtext");
+                    b.Property<double>("RightZ")
+                        .HasColumnType("double");
 
-                    b.Property<string>("RightZ")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("TransY")
-                        .HasColumnType("longtext");
+                    b.Property<double>("TransY")
+                        .HasColumnType("double");
 
                     b.HasKey("Id");
 

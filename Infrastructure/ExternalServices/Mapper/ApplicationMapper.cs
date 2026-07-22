@@ -1,13 +1,17 @@
-﻿using Application.DTOs.RequestDTOs.LCD;
+﻿using Application.DTOs.RequestDTOs.IO;
+using Application.DTOs.RequestDTOs.LCD;
 using Application.DTOs.RequestDTOs.LED;
 using Application.DTOs.ResponseDTOs;
+using Application.DTOs.ResponseDTOs.IO;
 using Application.DTOs.ResponseDTOs.LCD;
 using Application.DTOs.ResponseDTOs.LED;
 using AutoMapper;
 using Domain.Enitties;
+using Domain.Enitties.IO;
 using Domain.Enitties.LCD;
 using Domain.Enitties.LED;
 using Domain.Entities.LED;
+using Infrastructure.Repositories.IO;
 namespace Infrastructure.ExternalServices.Mapper
 {
     public class ApplicationMapper:Profile
@@ -74,6 +78,24 @@ namespace Infrastructure.ExternalServices.Mapper
             CreateMap<LCDResult, RequestLCDResult>();
             CreateMap<ResponseLCDResult, LCDResult>();
             CreateMap<LCDResult, ResponseLCDResult>();
+
+            ///<summary>
+            ///Mapping for IO
+            ///</summary>
+            CreateMap<IOModel, IOModelResponse>();
+            CreateMap<IOModelRequest, IOModel>();
+            CreateMap<IOConfigManagement, IOConfigResponse>();
+            CreateMap<IOConfigDTO, IOConfig>();
+            CreateMap<IOConfig, IOConfigDTO>();
+            CreateMap<IOConfigRequest, IOConfigManagement>();
+            CreateMap<IOMotionItemDTO, MotionPoint>();
+            CreateMap<MotionPoint, IOMotionItemDTO>();
+            CreateMap<IOMotionPointsRequest, MotionPointsManagement>();
+            CreateMap<MotionPointsManagement, IOMotionPointsResponse>();
+            CreateMap<IOOffsetDTO, Offset>();
+            CreateMap<Offset,IOOffsetDTO>();
+            CreateMap<IOOffsetsRequest, OffsetManagement>();
+            CreateMap<OffsetManagement, IOOffsetsResponse>();
         }
         private static string CombineWithUnderscore(params string?[] parts)
         {

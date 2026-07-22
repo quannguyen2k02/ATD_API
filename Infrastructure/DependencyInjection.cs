@@ -1,16 +1,21 @@
-﻿using Application.IRepositories;
+﻿using Application.DTOs.ResponseDTOs.IO;
+using Application.IRepositories;
 using Application.IRepositories.ChangeLog;
+using Application.IRepositories.IO;
 using Application.IRepositories.LCD;
 using Application.IRepositories.LED;
 using Application.IRepository.LED;
+using Application.IServices.IO;
 using Application.IServices.LCD;
 using Application.IServices.LED;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Infrastructure.Repositories.ChangeLog;
+using Infrastructure.Repositories.IO;
 using Infrastructure.Repositories.LCD;
 using Infrastructure.Repositories.LED;
 using Infrastructure.Services;
+using Infrastructure.Services.IO;
 using Infrastructure.Services.LCD;
 using Infrastructure.Services.LED;
 using Microsoft.EntityFrameworkCore;
@@ -61,7 +66,18 @@ public static class DependencyInjection
         ///Changelog
         /// </summary>
         services.AddScoped<ILedLogRepository, LedLogRepository>();
-
+        ///<summary>
+        ///IO
+        /// </summary>
+        services.AddScoped<IIOModelRepository, IOModelRepository>();
+        services.AddScoped<IIOModelService, IOModelService>();
+        services.AddScoped<IIOConfigManagementRepository, IOConfigManagementRepository>();
+        services.AddScoped<IIOConfigManagementService, IOConfigManagementService>();
+        services.AddScoped<IIORepository, IORepository>();
+        services.AddScoped<IIOMotionPointsManagementRepository, IOMotionPointManagementRepository>();
+        services.AddScoped<IIOMotionPointManagementService, IOMotionPointManagementService>();
+        services.AddScoped<IIOOffsetManagementService, IOOffsetsManagementService>();
+        services.AddScoped<IIOOffsetManagementRepository, IOOffsetManagementRepository>();
         return services;
     }
 }

@@ -10,6 +10,7 @@ namespace Domain.Enitties
         public string? Name { get; set; }
         public ICollection<Domain.Entities.LED.LED>? Leds { get; set; }
         public ICollection<Domain.Enitties.LCD.LCD>? LCDs { get; set; }
+        public ICollection<Domain.Enitties.IO.IO>? IOs { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime ModifiedDate { get; set; }
     }

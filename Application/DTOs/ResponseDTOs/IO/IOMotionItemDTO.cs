@@ -1,12 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Domain.Enitties.IO
+﻿namespace Application.DTOs.ResponseDTOs.IO
 {
-    [Table("MotionPoint")]
-    public class MotionPoint
+    public class IOMotionItemDTO
     {
-        public int Id { get; set; }
-        public int MotionPointsManagementId { get; set; }
         public string? MotionPointsName { get; set; }
         public string? LeftX { get; set; }
         public string? LeftY { get; set; }
