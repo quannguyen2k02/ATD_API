@@ -11,6 +11,7 @@ namespace Domain.Enitties.IO
         public ICollection<OffsetManagement>? OffsetManagements { get; set; }
         public ICollection<IOConfigManagement>? ConfigManagements { get; set; }
         public ICollection<MotionPointsManagement>? MotionPointsManagements { get; set; }
+        public ICollection<PressureManagement>? PressureManagements { get; set; }
         public DateTime CreateDate { get; set; }
     }
 }

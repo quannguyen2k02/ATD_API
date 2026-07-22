@@ -50,5 +50,8 @@ namespace Infrastructure.Data
         public DbSet<MotionPointsManagement> MotionPointsManagements { get; set; }
         public DbSet<Offset> Offsets { get; set; }
         public DbSet<OffsetManagement> OffsetManagements { get; set; }
+        public DbSet<PressureItem> PressureItems { get; set; }
+        public DbSet<PressureManagement> PressureManagements { get; set; }
+        
     }
 }
