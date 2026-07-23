@@ -96,6 +96,10 @@ namespace Infrastructure.ExternalServices.Mapper
             CreateMap<Offset,IOOffsetDTO>();
             CreateMap<IOOffsetsRequest, OffsetManagement>();
             CreateMap<OffsetManagement, IOOffsetsResponse>();
+            CreateMap<IOPressureRequest,PressureManagement>();
+            CreateMap<PressureManagement,IOPressureResponse>();
+            CreateMap<PressureItem, PressureItemDTO>();
+            CreateMap<PressureItemDTO, PressureItem>();
         }
         private static string CombineWithUnderscore(params string?[] parts)
         {

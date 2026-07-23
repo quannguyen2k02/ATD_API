@@ -10,6 +10,6 @@ namespace Application.DTOs.RequestDTOs.IO
         public DateTime CreateDate
         {
             get; set;
-        }
+        } = DateTime.Now;
     }
 }
