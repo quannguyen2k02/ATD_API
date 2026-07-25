@@ -8,7 +8,7 @@ namespace Domain.Enitties.IO
         public int Id { get; set; }
         public int PressureManagementId { get; set; }
         public string? Port { get; set; }
-        public int? Pressure { get; set; }
+        public double? Pressure { get; set; }
         public DateTime CreateDate { get; set; }
     }
 }
