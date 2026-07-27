@@ -98,6 +98,59 @@ namespace ATD_API.Controllers.IO
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Internal server error" });
             }
+        }
+        [HttpGet("MotionPoint")]
+        public async Task<IActionResult> GetMotionPointsByodelId(int modelId,[FromQuery] int? lastId = null, [FromQuery] int pageSize = 20)
+        {
+            try
+            {
+                var result = await _ioMotionPointManagementService.GetMotionPoints(modelId, lastId, pageSize);
+                return Ok(result);
+            }
+            catch(NotFoundException ex)
+            {
+                 return NotFound(new { ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Internal server error" });
+            }
+
+        }
+        [HttpGet("Offset")]
+        public async Task<IActionResult> GetOffsetBymodelId(int modelId, [FromQuery] int? lastId = null, [FromQuery] int pageSize = 20)
+        {
+            try
+            {
+                var result = await _ioOffsetManagementService.GetOffsets(modelId, lastId, pageSize);
+                return Ok(result);
+            }
+            catch(NotFoundException ex)
+            {
+                return NotFound(new { ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Internal server error" });
+            }
+
+        }
+        [HttpGet("IO_Config")]
+        public async Task<IActionResult> GetIOConfigByModelId(int modelId, [FromQuery] int? lastId = null, [FromQuery] int pageSize = 20)
+        {
+            try
+            {
+                var result = await _ioConfigManagementService.GetIOConfig(modelId, lastId, pageSize);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Internal server error" });
+            }
 
         }
     }

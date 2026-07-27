@@ -1,10 +1,13 @@
-﻿using Application.DTOs.RequestDTOs.IO;
+﻿using Application.Common;
+using Application.DTOs.RequestDTOs.IO;
 using Application.DTOs.ResponseDTOs.IO;
 using Application.IRepositories.IO;
 using Application.IServices.IO;
 using AutoMapper;
 using Domain.Enitties.IO;
 using Infrastructure.Exceptions;
+using Infrastructure.ExternalServices.Mapper;
+using Infrastructure.Repositories.IO;
 
 namespace Infrastructure.Services.IO
 {
@@ -44,6 +47,26 @@ namespace Infrastructure.Services.IO
             IOConfig.IOModelId = IOModel.Id;
             IOConfig.CreateDate = DateTime.Now;
             return _mapper.Map<IOConfigResponse>( await _configRepository.Add(IOConfig));
+        }
+
+        public async Task<CursorPagedResult<dynamic>> GetIOConfig(int modelId, int? lastId = null, int pageSize = 20)
+        {
+            var io = await _modelRepository.GetByIDAsync(modelId);
+            if (io == null) throw new NotFoundException($"Model Id: {modelId} was not found.");
+            var repoPage = await _configRepository.GetIOConfigManagement(modelId, lastId, pageSize);
+            var mappedItems = _mapper.Map<List<IOConfigResponse>>(repoPage.Items);
+            var resultItems = new List<dynamic>();
+            foreach (var item in mappedItems)
+            {
+                resultItems.Add(IO_Mapper.Map_Test_Config(item));
+            }
+            return new CursorPagedResult<dynamic>
+            {
+                Items = resultItems,
+                NextCursor = repoPage.NextCursor,
+                HasNextPage = repoPage.HasNextPage,
+                PageSize = repoPage.PageSize
+            };
         }
     }
 }

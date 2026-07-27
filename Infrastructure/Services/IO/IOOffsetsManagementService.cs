@@ -1,10 +1,12 @@
-﻿using Application.DTOs.RequestDTOs.IO;
+﻿using Application.Common;
+using Application.DTOs.RequestDTOs.IO;
 using Application.DTOs.ResponseDTOs.IO;
 using Application.IRepositories.IO;
 using Application.IServices.IO;
 using AutoMapper;
 using Domain.Enitties.IO;
 using Infrastructure.Exceptions;
+using Infrastructure.ExternalServices.Mapper;
 using Infrastructure.Repositories.IO;
 
 namespace Infrastructure.Services.IO
@@ -45,6 +47,26 @@ namespace Infrastructure.Services.IO
             offsets.IOModelId = IOModel.Id;
             offsets.CreateDate = DateTime.Now;
             return _mapper.Map<IOOffsetsResponse>(await _ioOffsetManagementRepository.Add(offsets));
+        }
+
+        public async Task<CursorPagedResult<dynamic>> GetOffsets(int modelId, int? lastId = null, int pageSize = 20)
+        {
+            var io = await _modelRepository.GetByIDAsync(modelId);
+            if (io == null) throw new NotFoundException($"Model Id: {modelId} was not found.");
+            var repoPage = await _ioOffsetManagementRepository.GetOffsetManagement(modelId, lastId, pageSize);
+            var mappedItems = _mapper.Map<List<IOOffsetsResponse>>(repoPage.Items);
+            var resultItems = new List<dynamic>();
+            foreach (var item in mappedItems)
+            {
+                resultItems.Add(IO_Mapper.Map_Offset(item));
+            }
+            return new CursorPagedResult<dynamic>
+            {
+                Items = resultItems,
+                NextCursor = repoPage.NextCursor,
+                HasNextPage = repoPage.HasNextPage,
+                PageSize = repoPage.PageSize
+            };
         }
     }
 }

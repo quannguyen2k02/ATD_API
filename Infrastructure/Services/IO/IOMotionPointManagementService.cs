@@ -1,11 +1,12 @@
-﻿using Application.DTOs.RequestDTOs.IO;
+﻿using Application.Common;
+using Application.DTOs.RequestDTOs.IO;
 using Application.DTOs.ResponseDTOs.IO;
 using Application.IRepositories.IO;
 using Application.IServices.IO;
 using AutoMapper;
 using Domain.Enitties.IO;
 using Infrastructure.Exceptions;
-using Infrastructure.Repositories.IO;
+using Infrastructure.ExternalServices.Mapper;
 
 namespace Infrastructure.Services.IO
 {
@@ -44,6 +45,26 @@ namespace Infrastructure.Services.IO
             motionPoint.IOModelId = IOModel.Id;
             motionPoint.CreateDate = DateTime.Now;
             return _mapper.Map<IOMotionPointsResponse>(await _ioMotionPointsManagementRepository.Add(motionPoint));
+        }
+
+        public async Task<CursorPagedResult<dynamic>> GetMotionPoints(int modelId, int? lastId = null, int pageSize = 20)
+        {
+            var io = await _modelRepository.GetByIDAsync(modelId);
+            if (io == null) throw new NotFoundException($"Model Id: {modelId} was not found.");
+            var repoPage = await _ioMotionPointsManagementRepository.GetIOMotionPoints(modelId, lastId, pageSize);
+            var mappedItems = _mapper.Map<List<IOMotionPointsResponse>>(repoPage.Items);
+            var resultItems = new List<dynamic>();
+            foreach (var item in mappedItems)
+            {
+                resultItems.Add(IO_Mapper.Map_MotionPoint(item));
+            }
+            return new CursorPagedResult<dynamic>
+            {
+                Items = resultItems,
+                NextCursor = repoPage.NextCursor,
+                HasNextPage = repoPage.HasNextPage,
+                PageSize = repoPage.PageSize
+            };
         }
     }
 }

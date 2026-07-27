@@ -9,6 +9,5 @@ namespace Domain.Enitties.IO
         public int? IOModelId { get; set; }
         public ICollection<IOConfig>? IOConfigs { get; set; }
         public DateTime CreateDate { get; set; }
-
     }
 }
