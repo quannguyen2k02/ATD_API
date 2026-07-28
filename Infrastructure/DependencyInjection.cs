@@ -80,6 +80,8 @@ public static class DependencyInjection
         services.AddScoped<IIOOffsetManagementRepository, IOOffsetManagementRepository>();
         services.AddScoped<IIOPressureManagementRepository, IOPressureRepository>();
         services.AddScoped<IIOPressureService, IOPressureService>();
+        services.AddScoped<IIORepository, IORepository>();
+        services.AddScoped<IIOService, IOService>();
         return services;
     }
 }

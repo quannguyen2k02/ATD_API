@@ -23,5 +23,11 @@ namespace Infrastructure.Services.IO
             var result = await _modelRepository.Add(IoModel);
             return _mapper.Map<IOModelResponse>(result);
         }
+
+        public async Task<List<IOModelResponse>> GetModelsByIOId(int ioId)
+        {
+            var models = await _modelRepository.Find(x=>x.IOId == ioId);
+            return _mapper.Map<List<IOModelResponse>>(models);
+        }
     }
 }

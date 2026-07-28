@@ -45,6 +45,10 @@ namespace Infrastructure.ExternalServices.Mapper
                 {
                     value = $"{motion.RightX}_{motion.RightY}_{motion.RightZ}";
                 }
+                else if (motion.MotionPointsName.Contains("后模组", StringComparison.OrdinalIgnoreCase))
+                {
+                    value = $"{motion.BackX}_{motion.BackY}_{motion.BackZ}";
+                }
                     ((IDictionary<string, object>)result)[key] = value;
             }
             return result;

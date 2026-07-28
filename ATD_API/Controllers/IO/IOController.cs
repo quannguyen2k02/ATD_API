@@ -16,13 +16,15 @@ namespace ATD_API.Controllers.IO
         private readonly IIOMotionPointManagementService _ioMotionPointManagementService;
         private readonly IIOOffsetManagementService _ioOffsetManagementService;
         private readonly IIOPressureService _ioPressureService;
-        public IOController(IIOModelService ioModelService, IIOConfigManagementService ioConfigManagementService, IIOMotionPointManagementService iOMotionPointManagementService , IIOOffsetManagementService ioOffsetManagementService, IIOPressureService ioPressureService)
+        private readonly IIOService _ioService;
+        public IOController(IIOModelService ioModelService, IIOConfigManagementService ioConfigManagementService, IIOMotionPointManagementService iOMotionPointManagementService, IIOOffsetManagementService ioOffsetManagementService, IIOPressureService ioPressureService, IIOService iOService)
         {
             _ioModelService = ioModelService;
             _ioConfigManagementService = ioConfigManagementService;
             _ioMotionPointManagementService = iOMotionPointManagementService;
             _ioOffsetManagementService = ioOffsetManagementService;
             _ioPressureService = ioPressureService;
+            _ioService = iOService;
         }
         [HttpPost("Add-New-Model")]
         public async Task<IActionResult> AddNewIOModel(IOModelRequest IOModel)
@@ -100,16 +102,16 @@ namespace ATD_API.Controllers.IO
             }
         }
         [HttpGet("MotionPoint")]
-        public async Task<IActionResult> GetMotionPointsByodelId(int modelId,[FromQuery] int? lastId = null, [FromQuery] int pageSize = 20)
+        public async Task<IActionResult> GetMotionPointsByodelId(int modelId, [FromQuery] int? lastId = null, [FromQuery] int pageSize = 20)
         {
             try
             {
                 var result = await _ioMotionPointManagementService.GetMotionPoints(modelId, lastId, pageSize);
                 return Ok(result);
             }
-            catch(NotFoundException ex)
+            catch (NotFoundException ex)
             {
-                 return NotFound(new { ex.Message });
+                return NotFound(new { ex.Message });
             }
             catch (Exception ex)
             {
@@ -125,7 +127,7 @@ namespace ATD_API.Controllers.IO
                 var result = await _ioOffsetManagementService.GetOffsets(modelId, lastId, pageSize);
                 return Ok(result);
             }
-            catch(NotFoundException ex)
+            catch (NotFoundException ex)
             {
                 return NotFound(new { ex.Message });
             }
@@ -152,6 +154,32 @@ namespace ATD_API.Controllers.IO
                 return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Internal server error" });
             }
 
+        }
+        [HttpGet("GetIOByLineId")]
+        public async Task<IActionResult> GetIOsByLineId(int lineId)
+        {
+            try
+            {
+                var result = await _ioService.GetIOsByLineId(lineId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Internal server error" });
+            }
+        }
+        [HttpGet("GetModelsByIOId")]
+        public async Task<IActionResult> GetModelsByIOId(int ioId)
+        {
+            try
+            {
+                var result = await _ioModelService.GetModelsByIOId(ioId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Internal server error" });
+            }
         }
     }
 }
