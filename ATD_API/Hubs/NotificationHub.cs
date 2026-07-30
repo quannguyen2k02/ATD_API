@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 namespace ATD_API.Hubs
 {
     public class NotificationHub : Hub
