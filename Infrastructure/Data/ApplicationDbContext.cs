@@ -52,6 +52,7 @@ namespace Infrastructure.Data
         public DbSet<OffsetManagement> OffsetManagements { get; set; }
         public DbSet<PressureItem> PressureItems { get; set; }
         public DbSet<PressureManagement> PressureManagements { get; set; }
-        
+        public DbSet<PlugItem> PlugItems { get; set; }
+
     }
 }

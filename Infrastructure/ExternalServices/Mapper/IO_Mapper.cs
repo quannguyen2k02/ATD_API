@@ -1,7 +1,5 @@
 ﻿using Application.DTOs.ResponseDTOs.IO;
-using Domain.Enitties.IO;
 using System.Dynamic;
-using System.Reflection;
 
 namespace Infrastructure.ExternalServices.Mapper
 {
@@ -17,7 +15,8 @@ namespace Infrastructure.ExternalServices.Mapper
             {
                 string key = $"{motion.MotionPointsName}";
                 string value = "";
-                if (motion.MotionPointsName.Contains("Left", StringComparison.OrdinalIgnoreCase)) {
+                if (motion.MotionPointsName.Contains("Left", StringComparison.OrdinalIgnoreCase)) 
+                {
                     value = $"{motion.LeftX}_{motion.LeftY}_{motion.LeftZ}";
                 }
                 else if (motion.MotionPointsName.Contains("Right", StringComparison.OrdinalIgnoreCase)) {

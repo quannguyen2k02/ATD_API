@@ -101,6 +101,8 @@ namespace Infrastructure.ExternalServices.Mapper
             CreateMap<PressureItem, PressureItemDTO>();
             CreateMap<PressureItemDTO, PressureItem>();
             CreateMap<IO,IOResponse>();
+            CreateMap<PlugItem, PlugItemDTO>();
+            CreateMap<PlugItemDTO, PlugItem>();
         }
         private static string CombineWithUnderscore(params string?[] parts)
         {

@@ -17,5 +17,7 @@ namespace Application.IRepositories
         Expression<Func<T, bool>>? predicate = null,
         bool ascending = true
     );
+        public Task<List<T>> AddRangeAsync(List<T> items);
+        public Task RemoveRange(List<T> items);
     }
 }

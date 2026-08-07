@@ -15,7 +15,8 @@ namespace ATD_API.Controllers.IO
         private readonly IIOOffsetManagementService _ioOffsetManagementService;
         private readonly IIOPressureService _ioPressureService;
         private readonly IIOService _ioService;
-        public IOController(IIOModelService ioModelService, IIOConfigManagementService ioConfigManagementService, IIOMotionPointManagementService iOMotionPointManagementService, IIOOffsetManagementService ioOffsetManagementService, IIOPressureService ioPressureService, IIOService iOService)
+        private readonly IIOPlugService _ioPlugService;
+        public IOController(IIOModelService ioModelService, IIOConfigManagementService ioConfigManagementService, IIOMotionPointManagementService iOMotionPointManagementService, IIOOffsetManagementService ioOffsetManagementService, IIOPressureService ioPressureService, IIOService iOService, IIOPlugService iOPlugService)
         {
             _ioModelService = ioModelService;
             _ioConfigManagementService = ioConfigManagementService;
@@ -23,6 +24,7 @@ namespace ATD_API.Controllers.IO
             _ioOffsetManagementService = ioOffsetManagementService;
             _ioPressureService = ioPressureService;
             _ioService = iOService;
+            _ioPlugService = iOPlugService;
         }
         [HttpPost("Add-New-Model")]
         public async Task<IActionResult> AddNewIOModel(IOModelRequest IOModel)
@@ -115,7 +117,6 @@ namespace ATD_API.Controllers.IO
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Internal server error" });
             }
-
         }
         [HttpGet("Offset")]
         public async Task<IActionResult> GetOffsetBymodelId(int modelId, [FromQuery] int? lastId = null, [FromQuery] int pageSize = 20)
@@ -173,6 +174,23 @@ namespace ATD_API.Controllers.IO
             {
                 var result = await _ioModelService.GetModelsByIOId(ioId);
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Internal server error" });
+            }
+        }
+        [HttpPut("Update-Port")]
+        public async Task<IActionResult> UpdatePort(PortRequest request)
+        {
+            try
+            {
+                var result = await _ioPlugService.UpdatePort(request);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { ex.Message });
             }
             catch (Exception ex)
             {

@@ -90,6 +90,16 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return (T)entity;
         }
-
+        public async Task<List<T>> AddRangeAsync(List<T> items)
+        {
+            await _context.Set<T>().AddRangeAsync(items);
+            await _context.SaveChangesAsync();
+            return items;
+        }
+        public async Task RemoveRange (List<T> items)
+        {
+             _context.Set<T>().RemoveRange(items);
+            await _context.SaveChangesAsync();
+        }
     }
 }

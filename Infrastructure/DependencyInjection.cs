@@ -82,6 +82,8 @@ public static class DependencyInjection
         services.AddScoped<IIOPressureService, IOPressureService>();
         services.AddScoped<IIORepository, IORepository>();
         services.AddScoped<IIOService, IOService>();
+        services.AddScoped<IIOPlugRepository, IOPlugRepository>();
+        services.AddScoped<IIOPlugService, IOPlugService>();
         return services;
     }
 }
