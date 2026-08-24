@@ -1,4 +1,4 @@
-﻿
+﻿using OpenTelemetry.Metrics;
 using ATD_API.Hubs;
 using Infrastructure.ExternalServices.Mapper;
 
@@ -24,7 +24,17 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 
 builder.Services.AddInfrastructure(builder.Configuration); 
-builder.Services.AddAutoMapper(typeof(ApplicationMapper)); 
+builder.Services.AddAutoMapper(typeof(ApplicationMapper));
+builder.Services
+    .AddOpenTelemetry()
+    .WithMetrics(metrics =>
+    {
+        metrics
+            .AddAspNetCoreInstrumentation()
+            .AddRuntimeInstrumentation()
+            .AddPrometheusExporter();
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -48,4 +58,5 @@ app.UseCors(myAllowSpecificOrigins);
 app.UseAuthorization();
 app.MapHub<NotificationHub>("/notificationHub");
 app.MapControllers();
+app.MapPrometheusScrapingEndpoint("/metrics");
 app.Run();
