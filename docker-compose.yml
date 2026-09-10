@@ -1,0 +1,51 @@
+version: '3.8'
+
+networks:
+  app-network:
+    driver: bridge
+
+services:
+  # Service MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: ATD_DB
+      MYSQL_USER: atd_user
+      MYSQL_PASSWORD: atd_pass
+    ports:
+      - "3307:3306"        # (tùy chọn) expose ra host để debug
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # Service ASP.NET Core API
+  atd-api:
+    build:
+      context: .              # Thư mục chứa Dockerfile và các project
+      dockerfile: Dockerfile  # Tên file Dockerfile (mặc định)
+    container_name: atd-api
+    restart: always
+    ports:
+      - "8080:8080"           # Map cổng host 8080 -> container 8080
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      # Connection string dùng tên service "mysql" làm hostname
+      - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=ATD_DB;Uid=atd_user;Pwd=atd_pass;SslMode=none;AllowPublicKeyRetrieval=true;
+    depends_on:
+      mysql:
+        condition: service_healthy   # Chỉ start API khi MySQL đã sẵn sàng
+    networks:
+      - app-network
+
+volumes:
+  mysql-data:
+    driver: local

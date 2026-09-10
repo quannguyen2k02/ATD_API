@@ -53,7 +53,6 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Led Model API V1");
     c.RoutePrefix = "swagger"; 
 });
-app.UseHttpsRedirection();
 app.UseCors(myAllowSpecificOrigins);
 app.UseAuthorization();
 app.MapHub<NotificationHub>("/notificationHub");
