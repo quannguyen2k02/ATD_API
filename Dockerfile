@@ -3,7 +3,7 @@ WORKDIR /src
 COPY ["ATD_API/ATD_API.csproj","ATD_API/"]
 COPY ["Domain/Domain.csproj","Domain/"]
 COPY ["Infrastructure/Infrastructure.csproj","Infrastructure/"]
-
+COPY ["Application/Application.csproj","Application/"]
 RUN dotnet restore "ATD_API/ATD_API.csproj"
 
 COPY . .
