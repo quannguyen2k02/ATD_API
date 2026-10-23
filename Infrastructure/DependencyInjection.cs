@@ -1,6 +1,5 @@
 ﻿using Application.DTOs.ResponseDTOs.IO;
 using Application.IRepositories;
-using Application.IRepositories.ChangeLog;
 using Application.IRepositories.IO;
 using Application.IRepositories.LCD;
 using Application.IRepositories.LED;
@@ -10,7 +9,6 @@ using Application.IServices.LCD;
 using Application.IServices.LED;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
-using Infrastructure.Repositories.ChangeLog;
 using Infrastructure.Repositories.IO;
 using Infrastructure.Repositories.LCD;
 using Infrastructure.Repositories.LED;
@@ -65,7 +63,6 @@ public static class DependencyInjection
         ///<summary>
         ///Changelog
         /// </summary>
-        services.AddScoped<ILedLogRepository, LedLogRepository>();
         ///<summary>
         ///IO
         /// </summary>

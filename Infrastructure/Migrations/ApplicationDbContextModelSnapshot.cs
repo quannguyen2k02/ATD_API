@@ -22,36 +22,6 @@ namespace Infrastructure.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Enitties.ChangeLog.LEDLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("FP")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("KB")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("LedId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ModelName")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LedId");
-
-                    b.ToTable("LEDLogs");
-                });
-
             modelBuilder.Entity("Domain.Enitties.IO.IO", b =>
                 {
                     b.Property<int>("Id")
@@ -1440,15 +1410,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("LedStatus");
                 });
 
-            modelBuilder.Entity("Domain.Enitties.ChangeLog.LEDLog", b =>
-                {
-                    b.HasOne("Domain.Entities.LED.LED", null)
-                        .WithMany("lEDLogs")
-                        .HasForeignKey("LedId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Domain.Enitties.IO.IO", b =>
                 {
                     b.HasOne("Domain.Enitties.Line", null)
@@ -1717,8 +1678,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("LedModels");
 
                     b.Navigation("LedResults");
-
-                    b.Navigation("lEDLogs");
                 });
 
             modelBuilder.Entity("Domain.Entities.LED.LedCamera", b =>

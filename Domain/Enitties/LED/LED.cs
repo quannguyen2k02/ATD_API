@@ -16,6 +16,5 @@ namespace Domain.Entities.LED
         public DateTime ModifiedDate { get; set; }
         public ICollection<LedConfig>? LedConfigs { get; set; }
         public ICollection<LedResult>? LedResults { get; set; }
-        public ICollection<LEDLog>? lEDLogs { get; set; }
     }
 }

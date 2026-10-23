@@ -37,7 +37,6 @@ namespace Infrastructure.Data
         ///> <summary>
         ///Log change Set
         ///
-        public DbSet<LEDLog> LEDLogs { get; set; }
 
         ///<summary>
         ///IO DB Set

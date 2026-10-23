@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260514062835_add-datetime-lcdresult")]
-    partial class adddatetimelcdresult
+    [Migration("20261020021803_ini")]
+    partial class ini
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,354 @@ namespace Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("Domain.Enitties.IO.IO", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AssetId")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DeviceName")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("LineId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LineId");
+
+                    b.ToTable("IO");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.IOConfig", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Cylinder")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("IOConfigManagementId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LightSource1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LightSource2")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Port")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("PortNo")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Retest")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Station")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Template")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TestPosition")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IOConfigManagementId");
+
+                    b.ToTable("IOConfig");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.IOConfigManagement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("IOModelId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IOModelId");
+
+                    b.ToTable("IOConfigManagement");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.IOModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("IOId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModelName")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IOId");
+
+                    b.ToTable("IOModel");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.MotionPoint", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BackX")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("BackY")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("BackZ")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("HoldX")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("HoldY")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("HoldZ")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("LeftX")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("LeftY")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("LeftZ")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("MaxVel")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("MotionPointsManagementId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MotionPointsName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RightX")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RightY")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RightZ")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TransY")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MotionPointsManagementId");
+
+                    b.ToTable("MotionPoint");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.MotionPointsManagement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("IOModelId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IOModelId");
+
+                    b.ToTable("MotionPointsManagement");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.Offset", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Module")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("OffsetManagementId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Port")
+                        .HasColumnType("longtext");
+
+                    b.Property<double?>("X_Axis_Insertion")
+                        .HasColumnType("double");
+
+                    b.Property<double?>("Y_Axis_Insertion")
+                        .HasColumnType("double");
+
+                    b.Property<double?>("Z_Axis_Insertion")
+                        .HasColumnType("double");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OffsetManagementId");
+
+                    b.ToTable("Offset");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.OffsetManagement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("IOModelId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IOModelId");
+
+                    b.ToTable("OffsetManagement");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.PlugItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("Actual")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("IOId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Limited")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Module")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Port")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("Warning")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IOId");
+
+                    b.ToTable("PlugItem");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.PressureItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Port")
+                        .HasColumnType("longtext");
+
+                    b.Property<double?>("Pressure")
+                        .HasColumnType("double");
+
+                    b.Property<int>("PressureManagementId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PressureManagementId");
+
+                    b.ToTable("PressureItem");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.PressureManagement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("IOModelId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IOModelId");
+
+                    b.ToTable("PressureManagement");
+                });
 
             modelBuilder.Entity("Domain.Enitties.LCD.LCD", b =>
                 {
@@ -344,6 +692,106 @@ namespace Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("LCDResult");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.LED.LedDeviceStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("LedDeviceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LedDeviceStatus");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.LED.LedResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CT")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Caps")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Charge_White")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Charge_Yellow")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Close_Caps")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Close_F4")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Close_Num")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("F4")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("KBLight")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("KB_Close")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("LEDId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModelName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("N_Camera")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Num")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Power")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Result")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SN")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TypeModel")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LEDId");
+
+                    b.ToTable("LedResult");
                 });
 
             modelBuilder.Entity("Domain.Enitties.Line", b =>
@@ -965,6 +1413,97 @@ namespace Infrastructure.Migrations
                     b.ToTable("LedStatus");
                 });
 
+            modelBuilder.Entity("Domain.Enitties.IO.IO", b =>
+                {
+                    b.HasOne("Domain.Enitties.Line", null)
+                        .WithMany("IOs")
+                        .HasForeignKey("LineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.IOConfig", b =>
+                {
+                    b.HasOne("Domain.Enitties.IO.IOConfigManagement", null)
+                        .WithMany("IOConfigs")
+                        .HasForeignKey("IOConfigManagementId");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.IOConfigManagement", b =>
+                {
+                    b.HasOne("Domain.Enitties.IO.IOModel", null)
+                        .WithMany("ConfigManagements")
+                        .HasForeignKey("IOModelId");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.IOModel", b =>
+                {
+                    b.HasOne("Domain.Enitties.IO.IO", null)
+                        .WithMany("IOModels")
+                        .HasForeignKey("IOId");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.MotionPoint", b =>
+                {
+                    b.HasOne("Domain.Enitties.IO.MotionPointsManagement", null)
+                        .WithMany("MotionPoints")
+                        .HasForeignKey("MotionPointsManagementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.MotionPointsManagement", b =>
+                {
+                    b.HasOne("Domain.Enitties.IO.IOModel", null)
+                        .WithMany("MotionPointsManagements")
+                        .HasForeignKey("IOModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.Offset", b =>
+                {
+                    b.HasOne("Domain.Enitties.IO.OffsetManagement", null)
+                        .WithMany("Offsets")
+                        .HasForeignKey("OffsetManagementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.OffsetManagement", b =>
+                {
+                    b.HasOne("Domain.Enitties.IO.IOModel", null)
+                        .WithMany("OffsetManagements")
+                        .HasForeignKey("IOModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.PlugItem", b =>
+                {
+                    b.HasOne("Domain.Enitties.IO.IO", null)
+                        .WithMany("PlugItems")
+                        .HasForeignKey("IOId");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.PressureItem", b =>
+                {
+                    b.HasOne("Domain.Enitties.IO.PressureManagement", null)
+                        .WithMany("PressureItems")
+                        .HasForeignKey("PressureManagementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.PressureManagement", b =>
+                {
+                    b.HasOne("Domain.Enitties.IO.IOModel", null)
+                        .WithMany("PressureManagements")
+                        .HasForeignKey("IOModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Enitties.LCD.LCD", b =>
                 {
                     b.HasOne("Domain.Enitties.Line", null)
@@ -1001,13 +1540,24 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Enitties.LED.LedResult", b =>
+                {
+                    b.HasOne("Domain.Entities.LED.LED", null)
+                        .WithMany("LedResults")
+                        .HasForeignKey("LEDId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.LED.Job", b =>
                 {
-                    b.HasOne("Domain.Entities.LED.LedStatus", null)
+                    b.HasOne("Domain.Entities.LED.LedStatus", "LedStatus")
                         .WithMany("Jobs")
                         .HasForeignKey("LedStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("LedStatus");
                 });
 
             modelBuilder.Entity("Domain.Entities.LED.LED", b =>
@@ -1021,9 +1571,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.LED.LedCamera", b =>
                 {
-                    b.HasOne("Domain.Entities.LED.LedModel", null)
+                    b.HasOne("Domain.Entities.LED.LedModel", "LedModel")
                         .WithMany("Cameras")
                         .HasForeignKey("LedModelId");
+
+                    b.Navigation("LedModel");
                 });
 
             modelBuilder.Entity("Domain.Entities.LED.LedConfig", b =>
@@ -1046,20 +1598,62 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.LED.LedModelConfig", b =>
                 {
-                    b.HasOne("Domain.Entities.LED.LedModel", null)
+                    b.HasOne("Domain.Entities.LED.LedModel", "LedModel")
                         .WithMany("LEDModelConfigs")
                         .HasForeignKey("LedModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("LedModel");
                 });
 
             modelBuilder.Entity("Domain.Entities.LED.LedStatus", b =>
                 {
-                    b.HasOne("Domain.Entities.LED.LedCamera", null)
+                    b.HasOne("Domain.Entities.LED.LedCamera", "LedCamera")
                         .WithMany("LedStatuses")
                         .HasForeignKey("LedCameraId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("LedCamera");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.IO", b =>
+                {
+                    b.Navigation("IOModels");
+
+                    b.Navigation("PlugItems");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.IOConfigManagement", b =>
+                {
+                    b.Navigation("IOConfigs");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.IOModel", b =>
+                {
+                    b.Navigation("ConfigManagements");
+
+                    b.Navigation("MotionPointsManagements");
+
+                    b.Navigation("OffsetManagements");
+
+                    b.Navigation("PressureManagements");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.MotionPointsManagement", b =>
+                {
+                    b.Navigation("MotionPoints");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.OffsetManagement", b =>
+                {
+                    b.Navigation("Offsets");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.PressureManagement", b =>
+                {
+                    b.Navigation("PressureItems");
                 });
 
             modelBuilder.Entity("Domain.Enitties.LCD.LCD", b =>
@@ -1073,6 +1667,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Enitties.Line", b =>
                 {
+                    b.Navigation("IOs");
+
                     b.Navigation("LCDs");
 
                     b.Navigation("Leds");
@@ -1083,6 +1679,8 @@ namespace Infrastructure.Migrations
                     b.Navigation("LedConfigs");
 
                     b.Navigation("LedModels");
+
+                    b.Navigation("LedResults");
                 });
 
             modelBuilder.Entity("Domain.Entities.LED.LedCamera", b =>
