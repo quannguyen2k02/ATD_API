@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class replacement_record : Migration
+    public partial class addrecordreplacement : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,9 +18,10 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    IOName = table.Column<string>(type: "longtext", nullable: true)
+                    IOName = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Port = table.Column<string>(type: "longtext", nullable: true)
+                    IOId = table.Column<int>(type: "int", nullable: true),
+                    Port = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     MaxSpec = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -30,8 +31,7 @@ namespace Infrastructure.Migrations
                     EmployeeName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     EmployeeCode = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IOId = table.Column<int>(type: "int", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -48,6 +48,12 @@ namespace Infrastructure.Migrations
                 name: "IX_ReplacementRecord_IOId",
                 table: "ReplacementRecord",
                 column: "IOId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReplacementRecord_IOName_Port_ReplaceDate",
+                table: "ReplacementRecord",
+                columns: new[] { "IOName", "Port", "ReplaceDate" },
+                unique: true);
         }
 
         /// <inheritdoc />

@@ -1,5 +1,4 @@
 ﻿using Domain.Enitties;
-using Domain.Enitties.ChangeLog;
 using Domain.Enitties.IO;
 using Domain.Enitties.LCD;
 using Domain.Enitties.LED;

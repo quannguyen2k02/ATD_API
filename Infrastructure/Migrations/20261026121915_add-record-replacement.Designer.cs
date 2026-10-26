@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20261023065734_replacement_record")]
-    partial class replacement_record
+    [Migration("20261026121915_add-record-replacement")]
+    partial class addrecordreplacement
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -391,13 +391,13 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("IOName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("MaxSpec")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Port")
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("ReplaceDate")
                         .HasColumnType("datetime(6)");
@@ -408,6 +408,9 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("IOId");
+
+                    b.HasIndex("IOName", "Port", "ReplaceDate")
+                        .IsUnique();
 
                     b.ToTable("ReplacementRecord");
                 });
