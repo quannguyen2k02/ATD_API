@@ -42,6 +42,7 @@ namespace Infrastructure.Data
         ///IO DB Set
         /// </summary>
         public DbSet<IO> IOs { get; set; }
+        public DbSet<ReplacementRecord> ReplacementRecords { get; set; }
         public DbSet<IOConfig> IOConfigs { get; set; }
         public DbSet<IOConfigManagement> IOConfigManagements { get; set; }
         public DbSet<IOModel> IOModels { get; set; }
@@ -53,5 +54,11 @@ namespace Infrastructure.Data
         public DbSet<PressureManagement> PressureManagements { get; set; }
         public DbSet<PlugItem> PlugItems { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ReplacementRecord>()
+                .HasIndex(x => new { x.IOName, x.Port, x.ReplaceDate })
+                .IsUnique();
+        }
     }
 }

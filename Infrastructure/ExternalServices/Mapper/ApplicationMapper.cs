@@ -103,6 +103,7 @@ namespace Infrastructure.ExternalServices.Mapper
             CreateMap<IO,IOResponse>();
             CreateMap<PlugItem, PlugItemDTO>();
             CreateMap<PlugItemDTO, PlugItem>();
+            CreateMap<ReplacementRecordRequest, ReplacementRecord>();
         }
         private static string CombineWithUnderscore(params string?[] parts)
         {

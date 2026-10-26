@@ -81,6 +81,8 @@ public static class DependencyInjection
         services.AddScoped<IIOService, IOService>();
         services.AddScoped<IIOPlugRepository, IOPlugRepository>();
         services.AddScoped<IIOPlugService, IOPlugService>();
+        services.AddScoped<IIOReplacementRecordRepository, IOReplacementRecordRepository>();
+        services.AddScoped<IIOReplacementRecordService, IOReplacementRecordService>();
         return services;
     }
 }

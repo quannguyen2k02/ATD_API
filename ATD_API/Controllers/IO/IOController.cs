@@ -16,7 +16,8 @@ namespace ATD_API.Controllers.IO
         private readonly IIOPressureService _ioPressureService;
         private readonly IIOService _ioService;
         private readonly IIOPlugService _ioPlugService;
-        public IOController(IIOModelService ioModelService, IIOConfigManagementService ioConfigManagementService, IIOMotionPointManagementService iOMotionPointManagementService, IIOOffsetManagementService ioOffsetManagementService, IIOPressureService ioPressureService, IIOService iOService, IIOPlugService iOPlugService)
+        private readonly IIOReplacementRecordService _svc;
+        public IOController(IIOModelService ioModelService, IIOConfigManagementService ioConfigManagementService, IIOMotionPointManagementService iOMotionPointManagementService, IIOOffsetManagementService ioOffsetManagementService, IIOPressureService ioPressureService, IIOService iOService, IIOPlugService iOPlugService, IIOReplacementRecordService svc   )
         {
             _ioModelService = ioModelService;
             _ioConfigManagementService = ioConfigManagementService;
@@ -25,6 +26,7 @@ namespace ATD_API.Controllers.IO
             _ioPressureService = ioPressureService;
             _ioService = iOService;
             _ioPlugService = iOPlugService;
+            _svc = svc;
         }
         [HttpPost("Add-New-Model")]
         public async Task<IActionResult> AddNewIOModel(IOModelRequest IOModel)
@@ -196,6 +198,17 @@ namespace ATD_API.Controllers.IO
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Internal server error" });
             }
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult<ImportResult>> Import(
+        [FromBody] List<ReplacementRecordRequest> rows, CancellationToken ct)
+        {
+            if (rows is null || rows.Count == 0)
+                return BadRequest("Danh sách rỗng");
+
+            return Ok(await _svc.ImportAsync(rows, ct));
         }
     }
 }

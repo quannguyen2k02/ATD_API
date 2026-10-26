@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20261020021803_ini")]
-    partial class ini
+    [Migration("20261023065734_replacement_record")]
+    partial class replacement_record
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -371,6 +371,45 @@ namespace Infrastructure.Migrations
                     b.HasIndex("IOModelId");
 
                     b.ToTable("PressureManagement");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.ReplacementRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("EmployeeCode")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("EmployeeName")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("IOId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IOName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("MaxSpec")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Port")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("ReplaceDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Spec")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IOId");
+
+                    b.ToTable("ReplacementRecord");
                 });
 
             modelBuilder.Entity("Domain.Enitties.LCD.LCD", b =>
@@ -1504,6 +1543,13 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Enitties.IO.ReplacementRecord", b =>
+                {
+                    b.HasOne("Domain.Enitties.IO.IO", null)
+                        .WithMany("ReplacementRecords")
+                        .HasForeignKey("IOId");
+                });
+
             modelBuilder.Entity("Domain.Enitties.LCD.LCD", b =>
                 {
                     b.HasOne("Domain.Enitties.Line", null)
@@ -1623,6 +1669,8 @@ namespace Infrastructure.Migrations
                     b.Navigation("IOModels");
 
                     b.Navigation("PlugItems");
+
+                    b.Navigation("ReplacementRecords");
                 });
 
             modelBuilder.Entity("Domain.Enitties.IO.IOConfigManagement", b =>
