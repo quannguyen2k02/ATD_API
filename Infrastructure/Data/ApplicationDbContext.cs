@@ -25,7 +25,6 @@ namespace Infrastructure.Data
         public DbSet<Job> Jobs { get; set; }
         public DbSet<LedDeviceStatus> LedDeviceStatuses { get; set; }
         public DbSet<LedResult> LedResults { get; set; }
-
         ///> <summary>
         ///LCD DB Set
         ///

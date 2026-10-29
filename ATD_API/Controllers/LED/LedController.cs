@@ -19,5 +19,6 @@ namespace ATD_API.Controllers.LED
             var result = await _ledService.GetLedsByLineId(lineId);
             return Ok(result);
         }
+        
     }
 }

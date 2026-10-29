@@ -16,26 +16,22 @@ namespace ATD_API.Controllers.LED
             _ledResultService = ledResultService;
         }
         [HttpPost]
-        public async Task<IActionResult> AddBatchLedResultAsync([FromBody] List<LedResultRequest> batch)
+        public async Task<IActionResult> AddNewLedResult(LedResultRequest request)
         {
             try
             {
-                if (batch == null || batch.Count == 0)
-                    return BadRequest("No data received.");
-                var (inserted, skipped) = await _ledResultService.AddBatchLedResultAsync(batch);
-                return Ok(new { Inserted = inserted, Skipped = skipped });
+                var result = await _ledResultService.AddnewLedResult(request);
+                return Ok(result);
+
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new { Message = ex.Message });
+                return NotFound(new { ex.Message });
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Internal server error" });
-
             }
-
-
         }
     }
 }

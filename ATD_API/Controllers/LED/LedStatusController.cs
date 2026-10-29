@@ -13,8 +13,8 @@ namespace ATD_API.Controllers.LED
     {
         private readonly ILogger<LedStatusController> _logger;
         private readonly ILedStatusService _ledStatusService;
-        private readonly IHubContext<NotificationHub> _hubContext;
-        public LedStatusController(ILogger<LedStatusController> logger, ILedStatusService ledStatusService, IHubContext<NotificationHub> hubContext)
+        private readonly IHubContext<LEDNotificationHub> _hubContext;
+        public LedStatusController(ILogger<LedStatusController> logger, ILedStatusService ledStatusService, IHubContext<LEDNotificationHub> hubContext)
         {
             _logger = logger;
             _ledStatusService = ledStatusService;

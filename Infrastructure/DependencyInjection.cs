@@ -44,10 +44,12 @@ public static class DependencyInjection
         services.AddScoped<ILineService,LineService>();
         services.AddScoped<ILedStatusRepository, LedStatusRepository>();
         services.AddScoped<ILedStatusService, LedStatusService>();
-        services.AddScoped<ILedResultService, LedResultService>();
-        services.AddScoped<ILedResultRepository, LedResultRepository>();
         services.AddScoped<ILedRepository, LedRepository>();
         services.AddScoped<ILedService, LedService>();
+        services.AddScoped<ILedRepository, LedRepository>();
+        services.AddScoped<ILedService, LedService>();
+        services.AddScoped<ILedResultRepository, LedResultRepository>();
+        services.AddScoped<ILedResultService, LedResultService>();
         ///<summary>
         ///LCD injection
         ///</summary>

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 namespace ATD_API.Hubs
 {
-    public class NotificationHub : Hub
+    public class LEDNotificationHub : Hub
     {
         // Các phương thức từ client có thể gọi
         public async Task SendMessage(string user, string message)

@@ -62,6 +62,8 @@ namespace Infrastructure.ExternalServices.Mapper
             CreateMap<LedStatusDTO, LedStatus>();
             CreateMap<LineDTO, Line>();
             CreateMap<LedConfigDTO, LedConfig>();
+            CreateMap<LedResultRequest, LedResult>();
+            CreateMap<LedResult, LedResultResponse>();
 
             /// <summary>
             /// Mapping for LCD

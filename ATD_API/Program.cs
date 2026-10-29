@@ -72,7 +72,7 @@ app.UseHttpsRedirection();
 app.UseCors(myAllowSpecificOrigins);
 app.UseAuthorization();
 
-app.MapHub<NotificationHub>("/notificationHub");
+app.MapHub<LEDNotificationHub>("/ledNotificationHub");
 app.MapControllers();
 
 app.Run();
