@@ -779,17 +779,23 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ModelName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Result")
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("SN")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LEDId");
+                    b.HasIndex("DateTime");
+
+                    b.HasIndex("Result");
+
+                    b.HasIndex("LEDId", "DateTime");
+
+                    b.HasIndex("ModelName", "DateTime");
 
                     b.ToTable("LedResult");
                 });
@@ -1549,11 +1555,13 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Enitties.LED.LedResult", b =>
                 {
-                    b.HasOne("Domain.Entities.LED.LED", null)
+                    b.HasOne("Domain.Entities.LED.LED", "LED")
                         .WithMany("LedResults")
                         .HasForeignKey("LEDId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("LED");
                 });
 
             modelBuilder.Entity("Domain.Entities.LED.Job", b =>
@@ -1569,11 +1577,13 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.LED.LED", b =>
                 {
-                    b.HasOne("Domain.Enitties.Line", null)
+                    b.HasOne("Domain.Enitties.Line", "Line")
                         .WithMany("Leds")
                         .HasForeignKey("LineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Line");
                 });
 
             modelBuilder.Entity("Domain.Entities.LED.LedCamera", b =>

@@ -57,6 +57,15 @@ namespace Infrastructure.Data
             modelBuilder.Entity<ReplacementRecord>()
                 .HasIndex(x => new { x.IOName, x.Port, x.ReplaceDate })
                 .IsUnique();
+            modelBuilder.Entity<LedResult>()
+                .HasOne(r => r.LED)
+                .WithMany(l => l.LedResults)
+                .HasForeignKey(r => r.LEDId)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<LedResult>().HasIndex(r => new { r.LEDId, r.DateTime });
+            modelBuilder.Entity<LedResult>().HasIndex(r => new { r.ModelName, r.DateTime });
+            modelBuilder.Entity<LedResult>().HasIndex(r => r.Result);
+            modelBuilder.Entity<LedResult>().HasIndex(r => r.DateTime);
         }
     }
 }
