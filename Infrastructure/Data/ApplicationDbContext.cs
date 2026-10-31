@@ -3,11 +3,12 @@ using Domain.Enitties.IO;
 using Domain.Enitties.LCD;
 using Domain.Enitties.LED;
 using Domain.Entities.LED;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -54,6 +55,7 @@ namespace Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<ReplacementRecord>()
                 .HasIndex(x => new { x.IOName, x.Port, x.ReplaceDate })
                 .IsUnique();

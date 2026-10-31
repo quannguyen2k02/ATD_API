@@ -4,9 +4,11 @@ using Application.IRepositories.IO;
 using Application.IRepositories.LCD;
 using Application.IRepositories.LED;
 using Application.IRepository.LED;
+using Application.IServices;
 using Application.IServices.IO;
 using Application.IServices.LCD;
 using Application.IServices.LED;
+using Domain.Enitties;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Infrastructure.Repositories.IO;
@@ -16,6 +18,7 @@ using Infrastructure.Services;
 using Infrastructure.Services.IO;
 using Infrastructure.Services.LCD;
 using Infrastructure.Services.LED;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -85,6 +88,26 @@ public static class DependencyInjection
         services.AddScoped<IIOPlugService, IOPlugService>();
         services.AddScoped<IIOReplacementRecordRepository, IOReplacementRecordRepository>();
         services.AddScoped<IIOReplacementRecordService, IOReplacementRecordService>();
+
+
+        //Identity
+
+        services.AddScoped<IAccountRepository, AccountRepository>();
+        services.AddScoped<ITokenService, TokenService>();
+        // 2. Identity (Dùng AddIdentityCore thay vì AddIdentity cho API)
+        services.AddIdentityCore<ApplicationUser>(options =>
+        {
+            options.User.RequireUniqueEmail = false;
+            options.SignIn.RequireConfirmedEmail = false;
+            options.Password.RequireDigit = false;
+            options.Password.RequireLowercase = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequiredLength = 6;
+        })
+        .AddRoles<IdentityRole>() // Bắt buộc phải có để dùng RoleManager
+        .AddEntityFrameworkStores<ApplicationDbContext>()
+        .AddDefaultTokenProviders(); // Lỗi sẽ biến mất sau khi thêm FrameworkReference
         return services;
     }
 }

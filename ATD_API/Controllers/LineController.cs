@@ -1,4 +1,5 @@
 ﻿using Application.IServices.LED;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ATD_API.Controllers
@@ -13,7 +14,7 @@ namespace ATD_API.Controllers
             _lineService = lineService;
         }
         [HttpGet("get-all-line")]
-
+        [Authorize]
         public async Task<IActionResult> GetAllLineAsync()
         {
             var lines =  await _lineService.GetAllLinesAsync();
