@@ -92,12 +92,14 @@ namespace Infrastructure.Repositories.LED
         public async Task<List<DeviceStatisticDto>> GetByDeviceAsync(LedResultStatisticFilter filter)
         {
             return await BuildQuery(filter)
+                .Include(r => r.LED)
+                .ThenInclude(led => led.Line)
                 .Where(r => r.LED != null)
-                .GroupBy(r => new { r.LEDId, DeviceName = r.LED!.Name, r.LED.AssetId })
+                .GroupBy(r => new { r.LEDId, DeviceName = r.LED!.Name, r.LED.AssetId, LineName = r.LED.Line != null ? r.LED.Line.Name : "Null", })
                 .Select(g => new DeviceStatisticDto
                 {
                     LEDId = g.Key.LEDId,
-                    DeviceName = g.Key.DeviceName,
+                    DeviceName = g.Key.LineName + "-" + g.Key.DeviceName,
                     AssetId = g.Key.AssetId,
                     Total = g.Count(),
                     Pass = g.Sum(r => r.Result == PassValue ? 1 : 0),

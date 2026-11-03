@@ -14,7 +14,7 @@ namespace ATD_API.Controllers
             _lineService = lineService;
         }
         [HttpGet("get-all-line")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetAllLineAsync()
         {
             var lines =  await _lineService.GetAllLinesAsync();
