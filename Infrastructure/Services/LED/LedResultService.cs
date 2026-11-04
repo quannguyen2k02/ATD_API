@@ -14,13 +14,11 @@ namespace Infrastructure.Services.LED
 {
     public class LedResultService : ILedResultService
     {
-        private readonly ApplicationDbContext _context;
         private readonly ILedResultRepository _ledResultRepository;
         private readonly ILedRepository _ledRepository;
         private readonly IMapper _mapper;
         public LedResultService(ApplicationDbContext context, ILedResultRepository ledResultRepository, ILedRepository ledRepository, IMapper mapper)
         {
-            _context = context;
             _ledResultRepository = ledResultRepository;
             _ledRepository = ledRepository;
             _mapper = mapper;

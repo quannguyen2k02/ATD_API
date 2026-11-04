@@ -12,14 +12,14 @@ namespace Infrastructure.Repositories.LED
         {
         }
 
-        public async Task<LedModel?> GetLatestLedModel(int ledId, string name)
+        public async Task<LedModel?> GetLatestLedModel(int ledId, string name, string kb, string fp)
         {
             return await _context.LEDModels
                 .Include(x => x.LEDModelConfigs)
                 .Include(x => x.Cameras)
                     .ThenInclude(c => c.LedStatuses)
                         .ThenInclude(s => s.Jobs)
-                .Where(x => x.LedId == ledId && x.Name == name)
+                .Where(x => x.LedId == ledId && x.Name == name&& x.KB == kb && x.FP == fp)
                 .OrderByDescending(x => x.CreateDate)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();

@@ -17,6 +17,19 @@ namespace Infrastructure.ExternalServices.Mapper
             var config = model.LEDModelConfigs?.FirstOrDefault();
             if (config != null)
             {
+                result.DelayStatus1_2_3_4_5 = $"{config.Delay_Status1}_{config.Delay_Status2}_{config.Delay_Status3}_{config.Delay_Status4}_{config.Delay_Status5}";
+                result.DelayAudio = config.Delay_Audio;
+                result.PressedKB = config.PressedKB;
+                result.enableFPTestStatus1_2_3_4_5 = $"{config.EnableFPTestStatus1}_{config.EnableFPTestStatus2}_{config.EnableFPTestStatus3}_{config.EnableFPTestStatus4}_{config.EnableFPTestStatus5}";
+                result.FPPosXYZ = $"{config.FPPositionX}_{config.FPPositionY}_{config.FPPositionZ}";
+                result.DelayFPTime = config.Delay_FPTime;
+                result.DelayFPTest = config.Delay_FPTest;
+                result.DelayIRTest = config.Delay_IRTest;
+                result.DelayStatusButtonTime = config.Delay_StatusButtonTime;
+                result.DelayGetSPKResult = config.Delay_GetSPKResult;
+                result.DelayWriteSNToAudio = config.Delay_WriteSNToAudio;
+
+
                 result.status12PosXYZ = $"{config.Status12PosX}_{config.Status12PosY}_{config.Status12PosZ}";
                 result.Status23PosXYZ = $"{config.Status23PosX}_{config.Status23PosY}_{config.Status23PosZ}";
                 result.Status34PosXYZ = $"{config.Status34PosX}_{config.Status34PosY}_{config.Status34PosZ}";

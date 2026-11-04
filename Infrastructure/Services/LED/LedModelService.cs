@@ -25,75 +25,75 @@ namespace Infrastructure.Services.LED
             _LedRepository = ledRepository;
             _LineRepository = lineRepository;
         }
-        //public async Task<LedModelDTO> AddLedModelAsync(LedModelDTO ledModelDTO)
-        //{
-        //    try
-        //    {
-        //        // 1. Xử lý Line và Device (Giữ nguyên logic của bạn)
-        //        int? lineId = await _LineRepository.GetIdByLineName(ledModelDTO.LineName);
-        //        if (!lineId.HasValue)
-        //            throw new NotFoundException($"Line with name '{ledModelDTO.LineName}' was not found.");
-
-        //        int? deviceId = await _LedRepository.GetDeviceIdByDeviceNameAndLineNameAsync(ledModelDTO.DeviceName, (int)lineId);
-        //        if (!deviceId.HasValue)
-        //            throw new NotFoundException($"Device with name '{ledModelDTO.DeviceName}' was not found.");
-
-        //        ledModelDTO.LedId = (int)deviceId;
-
-        //        // 2. Lấy bản ghi gần nhất từ DB (Entity)
-        //        var oldModelEntity = await _LedModelRepository.GetLatestLedModel(ledModelDTO.LedId, ledModelDTO.Name!);
-
-        //        // TRƯỜNG HỢP 1: Chưa có bản ghi nào trong DB -> Lưu luôn
-        //        if (oldModelEntity == null)
-        //        {
-        //            var newEntity = _mapper.Map<LedModel>(ledModelDTO);
-        //            var savedEntity = await _LedModelRepository.Add(newEntity);
-        //            return _mapper.Map<LedModelDTO>(savedEntity);
-        //        }
-
-        //        // 3. Chuyển Entity cũ sang DTO để có cùng cấu trúc so sánh
-        //        var oldModelDTO = _mapper.Map<LedModelDTO>(oldModelEntity);
-
-        //        // 4. So sánh bằng hàm DynamicComparer bạn đã viết
-        //        bool isDifferent = !DynamicComparer.AreMappedModelsEqual(oldModelDTO, ledModelDTO);
-
-        //        // TRƯỜNG HỢP 2: Dữ liệu không có gì thay đổi -> Trả về bản ghi cũ, không lưu
-        //        if (!isDifferent)
-        //        {
-        //            return oldModelDTO;
-        //        }
-
-        //        // TRƯỜNG HỢP 3: Có sự khác biệt -> Thêm mới
-        //        var newModel = _mapper.Map<LedModel>(ledModelDTO);
-        //        var result = await _LedModelRepository.Add(newModel);
-
-        //        return _mapper.Map<LedModelDTO>(result);
-        //    }
-        //    catch (NotFoundException)
-        //    {
-        //        throw; // Nên throw lại để Controller bắt được lỗi 404 (NotFound)
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception($"An error occurred while adding the LED model: {ex.Message}", ex);
-        //    }
-        //}
         public async Task<LedModelDTO> AddLedModelAsync(LedModelDTO ledModelDTO)
         {
-            int? lineId = await _LineRepository.GetIdByLineName(ledModelDTO.LineName);
-            if (!lineId.HasValue)
-                throw new NotFoundException($"Line with name '{ledModelDTO.LineName}' was not found.");
-
-            int? deviceId = await _LedRepository.GetDeviceIdByDeviceNameAndLineNameAsync(ledModelDTO.DeviceName, (int)lineId);
-            if (!deviceId.HasValue)
+            try
             {
-                throw new NotFoundException($"Device with name '{ledModelDTO.DeviceName}' was not found.");
-            }
-            ledModelDTO.LedId = (int)deviceId;
-            var ledModel = _mapper.Map<LedModel>(ledModelDTO);
+                // 1. Xử lý Line và Device (Giữ nguyên logic của bạn)
+                int? lineId = await _LineRepository.GetIdByLineName(ledModelDTO.LineName);
+                if (!lineId.HasValue)
+                    throw new NotFoundException($"Line with name '{ledModelDTO.LineName}' was not found.");
 
-            return _mapper.Map<LedModelDTO>(await _LedModelRepository.Add(ledModel));
+                int? deviceId = await _LedRepository.GetDeviceIdByDeviceNameAndLineNameAsync(ledModelDTO.DeviceName, (int)lineId);
+                if (!deviceId.HasValue)
+                    throw new NotFoundException($"Device with name '{ledModelDTO.DeviceName}' was not found.");
+
+                ledModelDTO.LedId = (int)deviceId;
+
+                // 2. Lấy bản ghi gần nhất từ DB (Entity)
+                var oldModelEntity = await _LedModelRepository.GetLatestLedModel(ledModelDTO.LedId, ledModelDTO.Name!, ledModelDTO.KB!, ledModelDTO.FP!);
+
+                // TRƯỜNG HỢP 1: Chưa có bản ghi nào trong DB -> Lưu luôn
+                if (oldModelEntity == null)
+                {
+                    var newEntity = _mapper.Map<LedModel>(ledModelDTO);
+                    var savedEntity = await _LedModelRepository.Add(newEntity);
+                    return _mapper.Map<LedModelDTO>(savedEntity);
+                }
+
+                // 3. Chuyển Entity cũ sang DTO để có cùng cấu trúc so sánh
+                var oldModelDTO = _mapper.Map<LedModelDTO>(oldModelEntity);
+
+                // 4. So sánh bằng hàm DynamicComparer bạn đã viết
+                bool isDifferent = !DynamicComparer.AreMappedModelsEqual(oldModelDTO, ledModelDTO);
+
+                // TRƯỜNG HỢP 2: Dữ liệu không có gì thay đổi -> Trả về bản ghi cũ, không lưu
+                if (!isDifferent)
+                {
+                    return oldModelDTO;
+                }
+
+                // TRƯỜNG HỢP 3: Có sự khác biệt -> Thêm mới
+                var newModel = _mapper.Map<LedModel>(ledModelDTO);
+                var result = await _LedModelRepository.Add(newModel);
+
+                return _mapper.Map<LedModelDTO>(result);
+            }
+            catch (NotFoundException)
+            {
+                throw; // Nên throw lại để Controller bắt được lỗi 404 (NotFound)
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while adding the LED model: {ex.Message}", ex);
+            }
         }
+        //public async Task<LedModelDTO> AddLedModelAsync(LedModelDTO ledModelDTO)
+        //{
+        //    int? lineId = await _LineRepository.GetIdByLineName(ledModelDTO.LineName);
+        //    if (!lineId.HasValue)
+        //        throw new NotFoundException($"Line with name '{ledModelDTO.LineName}' was not found.");
+
+        //    int? deviceId = await _LedRepository.GetDeviceIdByDeviceNameAndLineNameAsync(ledModelDTO.DeviceName, (int)lineId);
+        //    if (!deviceId.HasValue)
+        //    {
+        //        throw new NotFoundException($"Device with name '{ledModelDTO.DeviceName}' was not found.");
+        //    }
+        //    ledModelDTO.LedId = (int)deviceId;
+        //    var ledModel = _mapper.Map<LedModel>(ledModelDTO);
+
+        //    return _mapper.Map<LedModelDTO>(await _LedModelRepository.Add(ledModel));
+        //}
 
         public async Task<CursorPagedResult<dynamic>> GetLedModelAsync(string line, string devicename, string model, string kb, string fp, int? lastId = null, int pageSize = 20)
         {
