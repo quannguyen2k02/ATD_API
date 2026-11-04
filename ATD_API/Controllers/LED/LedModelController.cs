@@ -31,8 +31,20 @@ namespace ATD_API.Controllers.LED
             //{
             //    return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Internal server error" });
             //}
-            var result = await _ledModelService.AddLedModelAsync(ledmodelDTO);
-            return Ok(result);
+            try
+            {
+                var result = await _ledModelService.AddLedModelAsync(ledmodelDTO);
+                return Ok(result);
+
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = ex.Message });
+            }
         }
         [HttpGet("by-model-version")]
         public async Task<IActionResult> GetLedModelAsync([FromQuery] string line, [FromQuery] string devicename, [FromQuery] string model, [FromQuery] string kb, [FromQuery] string fp, [FromQuery] int? lastId = null, [FromQuery] int pageSize = 20)
@@ -48,7 +60,7 @@ namespace ATD_API.Controllers.LED
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Internal server error" });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = ex.Message });
             }
 
         }
@@ -87,7 +99,7 @@ namespace ATD_API.Controllers.LED
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Internal server error" });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = ex.Message });
             }
         }
 

@@ -73,5 +73,9 @@ namespace ATD_API.Controllers.LED
             var result = await _ledResultService.GetLedLogAsync(filter);
             return Ok(result);
         }
+
+        [HttpGet("fail-statistics")]
+        public async Task<IActionResult> GetFailItemStatistics([FromQuery] LedResultStatisticFilter filter)
+            => Ok(await _ledResultService.GetFailItemStatisticsAsync(filter));
     }
 }

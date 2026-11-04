@@ -65,4 +65,42 @@ namespace Infrastructure.ExternalServices.Mapper
             return result;
         }
     }
+
+    public static class DynamicComparer
+    {
+        public static bool AreMappedModelsEqual(LedModelDTO oldModel, LedModelDTO newModel)
+        {
+            // 1. Map cả 2 DTO sang Dynamic
+            var oldMapped = LED_MapToDynamic.MapToDynamic(oldModel);
+            var newMapped = LED_MapToDynamic.MapToDynamic(newModel);
+
+            // 2. Ép kiểu về Dictionary để dễ duyệt
+            var dict1 = (IDictionary<string, object>)oldMapped;
+            var dict2 = (IDictionary<string, object>)newMapped;
+
+            // 3. Các trường hệ thống LUÔN KHÁC NHAU (Id, CreateDate) -> Phải bỏ qua
+            var ignoredKeys = new HashSet<string> { "Id", "CreateDate" };
+
+            var keys1 = dict1.Keys.Where(k => !ignoredKeys.Contains(k)).ToList();
+            var keys2 = dict2.Keys.Where(k => !ignoredKeys.Contains(k)).ToList();
+
+            // Nếu số lượng key khác nhau -> Có sự thay đổi (VD: thêm/bớt Job)
+            if (keys1.Count != keys2.Count) return false;
+
+            // 4. So sánh từng cặp Key-Value
+            foreach (var key in keys1)
+            {
+                if (!dict2.ContainsKey(key)) return false;
+
+                var val1 = dict1[key]?.ToString() ?? "";
+                var val2 = dict2[key]?.ToString() ?? "";
+
+                // Nếu có bất kỳ value nào khác nhau -> Có sự thay đổi
+                if (val1 != val2) return false;
+            }
+
+            // Mọi thứ giống hệt nhau
+            return true;
+        }
+    }
 }

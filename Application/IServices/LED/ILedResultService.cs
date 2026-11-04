@@ -16,5 +16,6 @@ namespace Application.IServices.LED
         Task<List<HourlyStatisticDto>> GetByHourAsync(LedResultStatisticFilter filter);
         Task<List<LedResultResponse>> GetBySNAsync(string sn);
         Task<List<LedResultResponse>> GetLedLogAsync(LedResultStatisticFilter filter);
+        Task<List<FailItemStatisticDto>> GetFailItemStatisticsAsync(LedResultStatisticFilter filter);
     }
 }

@@ -97,5 +97,10 @@ namespace Infrastructure.Services.LED
         {
             return await _ledResultRepository.GetLedLogAsync(filter);
         }
+
+        public async Task<List<FailItemStatisticDto>> GetFailItemStatisticsAsync(LedResultStatisticFilter filter)
+        {
+            return await _ledResultRepository.GetFailItemStatisticsAsync(filter);
+        }
     }
 }

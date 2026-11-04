@@ -18,25 +18,27 @@ namespace Infrastructure.Repositories.LED
             // Giới hạn pageSize hợp lý
             pageSize = Math.Clamp(pageSize, 1, 100);
 
-            var baseQuery = _context.LedConfigs.Where(x => x.LedId == deviceId);
+            // 1. Khai báo tường minh IQueryable
+            IQueryable<LedConfig> baseQuery = _context.LedConfigs.Where(x => x.LedId == deviceId);
+
+            // 2. Vì sắp xếp giảm dần, dùng dấu < để lấy các bản ghi cũ hơn
             if (lastId.HasValue)
             {
-                baseQuery = baseQuery.Where(x => x.ID > lastId.Value);
+                baseQuery = baseQuery.Where(x => x.ID < lastId.Value);
             }
 
-            // Lấy thêm 1 bản ghi để xác định còn trang sau không
+            // 3. Sắp xếp mới nhất đến cũ nhất và lấy dữ liệu
             var itemsWithExtra = await baseQuery
-                .OrderBy(x => x.ID)
+                .OrderByDescending(x => x.CreateDate) // Mới nhất trước
+                .ThenByDescending(x => x.ID)          // Nếu trùng CreateDate thì ID lớn hơn đứng trước
                 .Take(pageSize + 1)
+                .AsNoTracking()
                 .ToListAsync();
 
             bool hasNextPage = itemsWithExtra.Count > pageSize;
             var items = hasNextPage ? itemsWithExtra.Take(pageSize).ToList() : itemsWithExtra;
 
             int? nextCursor = hasNextPage ? items.Last().ID : (int?)null;
-
-            // Optional: tính totalCount nếu cần, nhưng có thể bỏ qua để tối ưu
-            // var totalCount = await _context.LedConfigs.CountAsync(x => x.LedId == deviceId);
 
             return new CursorPagedResult<LedConfig>
             {
