@@ -54,6 +54,12 @@ namespace Infrastructure.Data
         public DbSet<PlugItem> PlugItems { get; set; }
         public DbSet<IOResult> IOResults { get; set; }
         public DbSet<ModelGroup> ModelGroups { get; set; }
+
+
+        /// <summary>
+        /// Refresh Token 
+        /// </summary>
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

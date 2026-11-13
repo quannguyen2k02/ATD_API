@@ -1088,6 +1088,38 @@ namespace Infrastructure.Migrations
                     b.ToTable("ModelGroup");
                 });
 
+            modelBuilder.Entity("Domain.Enitties.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshToken");
+                });
+
             modelBuilder.Entity("Domain.Entities.LED.Job", b =>
                 {
                     b.Property<int>("Id")
@@ -1973,6 +2005,17 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("LED");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.RefreshToken", b =>
+                {
+                    b.HasOne("Domain.Enitties.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Entities.LED.Job", b =>

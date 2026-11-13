@@ -24,12 +24,19 @@ namespace ATD_API.Controllers.Auth
         [HttpPost("signin")]
         public async Task<IActionResult> SignIn([FromBody] SignInModel model)
         {
-            var token = await _accountRepo.SignInAsync(model);
-            return string.IsNullOrEmpty(token)
-                ? Unauthorized("Invalid username or password")
-                : Ok(new { Token = token });
+            var result = await _accountRepo.SignInAsync(model);
+            return result == null ? Unauthorized("Username or password is incorrect") : Ok(result);
         }
 
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+        {
+            var result = await _accountRepo.RefreshTokenAsync(request);
+            if (result == null)
+                return Unauthorized("Refresh token is invalid or has expired.");
+
+            return Ok(result);
+        }
         // Test xem thông tin bản thân
         [HttpGet("profile")]
         [Authorize] // Bắt buộc đăng nhập

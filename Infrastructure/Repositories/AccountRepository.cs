@@ -4,7 +4,14 @@ using Application.IRepositories;
 using Application.IServices;
 using Domain.Contants;
 using Domain.Enitties;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Infrastructure.Repositories
 {
@@ -13,11 +20,15 @@ namespace Infrastructure.Repositories
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ITokenService _tokenService;
-        public AccountRepository(UserManager<ApplicationUser> userManager, ITokenService tokenService, RoleManager<IdentityRole> roleManager)
+        private readonly ApplicationDbContext _context;
+        private readonly IConfiguration _configuration;
+        public AccountRepository(UserManager<ApplicationUser> userManager, ITokenService tokenService, RoleManager<IdentityRole> roleManager, ApplicationDbContext context, IConfiguration configuration)
         {
             _userManager = userManager;
             _tokenService = tokenService;
             _roleManager = roleManager;
+            _context = context;
+            _configuration = configuration;
         }
 
         public async Task<IdentityResult> AssignRoleAsync(AssignRoleModel model)
@@ -162,13 +173,39 @@ namespace Infrastructure.Repositories
             return result;
         }
 
-        public async Task<string> SignInAsync(SignInModel model)
+        public async Task<AuthResponse> SignInAsync(SignInModel model)
         {
             var user = await _userManager.FindByNameAsync(model.EmployeeCode);
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
-                return string.Empty;
+                return null!;
+            var expiredTokens = await _context.RefreshTokens
+                .Where(x => x.UserId == user.Id && (x.ExpiresAt < DateTime.UtcNow || x.IsRevoked))
+                .ToListAsync();
 
-            return await _tokenService.GenerateTokenAsync(user);
+                if (expiredTokens.Any())
+                {
+                    _context.RefreshTokens.RemoveRange(expiredTokens);
+                }
+            var accessToken = await _tokenService.GenerateTokenAsync(user);
+            var refreshToken = _tokenService.GenerateRefreshToken();
+
+            // Lưu Refresh Token vào DB
+            _context.RefreshTokens.Add(new RefreshToken
+            {
+                UserId = user.Id,
+                Token = refreshToken,
+                ExpiresAt = DateTime.UtcNow.AddDays(7),
+                CreatedAt = DateTime.UtcNow,
+                IsRevoked = false
+            });
+            await _context.SaveChangesAsync();
+
+            return new AuthResponse
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken,
+                AccessTokenExpiration = DateTime.UtcNow.AddMinutes(15)
+            };
         }
 
         public async Task<IdentityResult> SignUpAsync(SignUpModel model)
@@ -214,6 +251,70 @@ namespace Infrastructure.Repositories
             var result = await _userManager.DeleteAsync(user);
 
             return result;
+        }
+
+        public async Task<AuthResponse> RefreshTokenAsync(RefreshTokenRequest request)
+        {
+            // 1. Giải mã Access Token cũ (dù đã hết hạn) để lấy UserId
+            var principal = GetPrincipalFromExpiredToken(request.AccessToken);
+            if (principal == null) return null!;
+
+            var userId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId!);
+
+            // 2. Tìm Refresh Token trong DB
+            var storedToken = await _context.RefreshTokens
+                .FirstOrDefaultAsync(x => x.Token == request.RefreshToken && x.UserId == userId);
+
+            // 3. Kiểm tra tính hợp lệ
+            if (storedToken == null || storedToken.IsRevoked || storedToken.ExpiresAt <= DateTime.UtcNow)
+                return null!; // Token không tồn tại, đã bị thu hồi hoặc hết hạn
+
+            // 4. (Tùy chọn & Khuyên dùng) Thu hồi token cũ (Token Rotation)
+            storedToken.IsRevoked = true;
+
+            // 5. Tạo cặp Token mới
+            var newAccessToken = await _tokenService.GenerateTokenAsync(user!);
+            var newRefreshToken = _tokenService.GenerateRefreshToken();
+
+            // 6. Lưu Refresh Token mới vào DB
+            _context.RefreshTokens.Add(new RefreshToken
+            {
+                UserId = user!.Id,
+                Token = newRefreshToken,
+                ExpiresAt = DateTime.UtcNow.AddDays(7), // Refresh Token sống 7 ngày
+                CreatedAt = DateTime.UtcNow,
+                IsRevoked = false
+            });
+
+            await _context.SaveChangesAsync();
+
+            return new AuthResponse
+            {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken,
+                AccessTokenExpiration = DateTime.UtcNow.AddMinutes(15)
+            };
+        }
+        private ClaimsPrincipal? GetPrincipalFromExpiredToken(string token)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]!)),
+                ValidateLifetime = false // 👈 Bỏ qua kiểm tra hết hạn
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+
+            if (securityToken is not JwtSecurityToken jwtSecurityToken ||
+                !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                throw new SecurityTokenException("Invalid token");
+
+            return principal;
         }
     }
 }
