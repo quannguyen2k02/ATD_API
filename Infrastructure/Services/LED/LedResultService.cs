@@ -1,4 +1,5 @@
-﻿using Application.DTOs.LedStatistics;
+﻿using Application.Common;
+using Application.DTOs.LedStatistics;
 using Application.DTOs.RequestDTOs.LED;
 using Application.DTOs.ResponseDTOs.LED;
 using Application.IRepositories.LED;
@@ -9,6 +10,7 @@ using Domain.Enitties.LED;
 using Infrastructure.Data;
 using Infrastructure.Exceptions;
 using Infrastructure.Repositories.IO;
+using System.Linq.Expressions;
 
 namespace Infrastructure.Services.LED
 {
@@ -40,6 +42,8 @@ namespace Infrastructure.Services.LED
 
         public Task<List<ModelStatisticDto>> GetByModelAsync(LedResultStatisticFilter filter)
             => _ledResultRepository.GetByModelAsync(NormalizeFilter(filter));
+        public Task<List<ModelStatisticDto>> GetByModelGroupAsync(LedResultStatisticFilter filter)
+            => _ledResultRepository.GetByModelGroupAsync(NormalizeFilter(filter));
 
         public Task<List<LineStatisticDto>> GetByLineAsync(LedResultStatisticFilter filter)
             => _ledResultRepository.GetByLineAsync(NormalizeFilter(filter));
@@ -99,6 +103,13 @@ namespace Infrastructure.Services.LED
         public async Task<List<FailItemStatisticDto>> GetFailItemStatisticsAsync(LedResultStatisticFilter filter)
         {
             return await _ledResultRepository.GetFailItemStatisticsAsync(filter);
+        }
+        public async Task<CursorPaged<LedResultResponse>> GetLedLogPagedAsync(
+    LedResultStatisticFilter filter,
+    int? lastId = null,
+    int pageSize = 20)
+         {
+            return await _ledResultRepository.GetLedLogPagedAsync(filter, lastId, pageSize);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Application.DTOs.LedStatistics;
+﻿using Application.Common;
+using Application.DTOs.LedStatistics;
 using Application.DTOs.RequestDTOs.LED;
 using Application.DTOs.ResponseDTOs.LED;
 
@@ -9,6 +10,8 @@ namespace Application.IServices.LED
         public Task<LedResultResponse> AddnewLedResult(LedResultRequest ledResultRequest);
         Task<LedResultStatisticDto> GetOverviewAsync(LedResultStatisticFilter filter);
         Task<List<ModelStatisticDto>> GetByModelAsync(LedResultStatisticFilter filter);
+        Task<List<ModelStatisticDto>> GetByModelGroupAsync(LedResultStatisticFilter filter);
+
         Task<List<LineStatisticDto>> GetByLineAsync(LedResultStatisticFilter filter);
         Task<List<DeviceStatisticDto>> GetByDeviceAsync(LedResultStatisticFilter filter);
         Task<List<DailyStatisticDto>> GetByDayAsync(LedResultStatisticFilter filter);
@@ -17,5 +20,9 @@ namespace Application.IServices.LED
         Task<List<LedResultResponse>> GetBySNAsync(string sn);
         Task<List<LedResultResponse>> GetLedLogAsync(LedResultStatisticFilter filter);
         Task<List<FailItemStatisticDto>> GetFailItemStatisticsAsync(LedResultStatisticFilter filter);
+        public  Task<CursorPaged<LedResultResponse>> GetLedLogPagedAsync(
+    LedResultStatisticFilter filter,
+    int? lastId = null,
+    int pageSize = 20);
     }
 }

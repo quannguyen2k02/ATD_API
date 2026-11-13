@@ -1,4 +1,5 @@
-﻿using Application.DTOs.RequestDTOs.IO;
+﻿using Application.DTOs.RequestDTOs;
+using Application.DTOs.RequestDTOs.IO;
 using Application.DTOs.RequestDTOs.LCD;
 using Application.DTOs.RequestDTOs.LED;
 using Application.DTOs.ResponseDTOs;
@@ -106,6 +107,13 @@ namespace Infrastructure.ExternalServices.Mapper
             CreateMap<PlugItem, PlugItemDTO>();
             CreateMap<PlugItemDTO, PlugItem>();
             CreateMap<ReplacementRecordRequest, ReplacementRecord>();
+            CreateMap<IOResult, IOResultResponse>();
+            CreateMap<IOResultRequest, IOResult>();
+
+            /// <summary>
+            /// Mapper ModelGroup
+            CreateMap<ModelGroup, ModelGroupResponse>();
+            CreateMap<ModelGroupRequest, ModelGroup>();
         }
         private static string CombineWithUnderscore(params string?[] parts)
         {

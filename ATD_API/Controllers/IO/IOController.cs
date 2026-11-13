@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.RequestDTOs.IO;
+using Application.DTOs.RequestDTOs.LCD;
 using Application.IServices.IO;
 using Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,8 @@ namespace ATD_API.Controllers.IO
         private readonly IIOService _ioService;
         private readonly IIOPlugService _ioPlugService;
         private readonly IIOReplacementRecordService _svc;
-        public IOController(IIOModelService ioModelService, IIOConfigManagementService ioConfigManagementService, IIOMotionPointManagementService iOMotionPointManagementService, IIOOffsetManagementService ioOffsetManagementService, IIOPressureService ioPressureService, IIOService iOService, IIOPlugService iOPlugService, IIOReplacementRecordService svc   )
+        private readonly IIOResultService _ioResultService;
+        public IOController(IIOModelService ioModelService, IIOConfigManagementService ioConfigManagementService, IIOMotionPointManagementService iOMotionPointManagementService, IIOOffsetManagementService ioOffsetManagementService, IIOPressureService ioPressureService, IIOService iOService, IIOPlugService iOPlugService, IIOReplacementRecordService svc, IIOResultService ioResultService)
         {
             _ioModelService = ioModelService;
             _ioConfigManagementService = ioConfigManagementService;
@@ -27,6 +29,7 @@ namespace ATD_API.Controllers.IO
             _ioService = iOService;
             _ioPlugService = iOPlugService;
             _svc = svc;
+            _ioResultService = ioResultService;
         }
         [HttpPost("Add-New-Model")]
         public async Task<IActionResult> AddNewIOModel(IOModelRequest IOModel)
@@ -209,6 +212,28 @@ namespace ATD_API.Controllers.IO
                 return BadRequest("Danh sách rỗng");
 
             return Ok(await _svc.ImportAsync(rows, ct));
+        }
+        [HttpPost("batch")]
+        public async Task<IActionResult> AddBatch([FromBody] List<IOResultRequest> batch)
+        {
+            if (batch == null || batch.Count == 0)
+                return BadRequest("No data received.");
+
+            try
+            {
+                var (inserted, skipped) = await _ioResultService.AddBatchAsync(batch);
+                return Ok(new { Inserted = inserted, Skipped = skipped });
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, "Internal server error."+ex.Message);
+            }
+
         }
     }
 }

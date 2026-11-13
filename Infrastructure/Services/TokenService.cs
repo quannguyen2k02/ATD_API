@@ -38,7 +38,7 @@ namespace Infrastructure.Services
             var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
-                expires: DateTime.Now.AddMinutes(5), // Nhớ dùng UtcNow
+                expires: DateTime.Now.AddMinutes(15),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authenKey, SecurityAlgorithms.HmacSha256)
             );

@@ -13,7 +13,9 @@ namespace Domain.Enitties.IO
         public DateTime CreateDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public ICollection<IOModel>? IOModels { get; set; }
-        public ICollection<PlugItem> PlugItems { get; set; }
+        public ICollection<PlugItem>? PlugItems { get; set; }
         public ICollection<ReplacementRecord>? ReplacementRecords { get; set; }
+        public ICollection<IOResult>? IOResults { get; set; }
+        public virtual Line? Line { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 {
     public class LedResultResponse
     {
+        public int Id { get; set; }
         public int LEDId { get; set; }
         public string? SN { get; set; }
         public string? ModelName { get; set; }

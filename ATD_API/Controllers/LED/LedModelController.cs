@@ -1,6 +1,7 @@
 ﻿using Application.DTOs.RequestDTOs.LED;
 using Application.IServices.LED;
 using Infrastructure.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ATD_API.Controllers.LED
@@ -47,6 +48,8 @@ namespace ATD_API.Controllers.LED
             }
         }
         [HttpGet("by-model-version")]
+        [Authorize]
+
         public async Task<IActionResult> GetLedModelAsync([FromQuery] string line, [FromQuery] string devicename, [FromQuery] string model, [FromQuery] string kb, [FromQuery] string fp, [FromQuery] int? lastId = null, [FromQuery] int pageSize = 20)
         {
             try
@@ -65,6 +68,8 @@ namespace ATD_API.Controllers.LED
 
         }
         [HttpGet("by-device")]
+        [Authorize]
+
         public async Task<IActionResult> GetLedModelByDevice([FromQuery] string line, [FromQuery] string deviceName, [FromQuery] int? lastId = null, [FromQuery] int pageSize = 20)
         {
             try
@@ -86,6 +91,8 @@ namespace ATD_API.Controllers.LED
             }
         }
         [HttpGet("by-id")]
+        [Authorize]
+
         public async Task<IActionResult> GetLedModelById(int id)
         {
             try

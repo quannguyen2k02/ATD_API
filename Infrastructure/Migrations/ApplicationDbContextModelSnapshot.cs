@@ -209,6 +209,189 @@ namespace Infrastructure.Migrations
                     b.ToTable("IOModel");
                 });
 
+            modelBuilder.Entity("Domain.Enitties.IO.IOResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Back_Audio")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Back_AudioV2")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Back_Docking")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Back_Docking_1")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Back_Docking_2")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Back_Docking_3")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Back_Docking_4")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Back_HDMI")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Back_MiniSD")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Back_SD")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Back_TypeC_1")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Back_TypeC_2")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Back_USB1")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Back_USB2")
+                        .HasColumnType("longtext");
+
+                    b.Property<double>("CT")
+                        .HasColumnType("double");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("IOId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Left_Audio")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Left_AudioV2")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Left_Docking")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Left_Docking_1")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Left_Docking_2")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Left_Docking_3")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Left_Docking_4")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Left_HDMI")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Left_SD")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Left_TypeC_1")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Left_TypeC_2")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Left_TypeC_3")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Left_TypeC_4")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Left_USB_1")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Left_USB_2")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Left_USB_3")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Left_USB_4")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Model")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Result")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Retest")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Right_Audio")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_AudioV2")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_Docking")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_Docking_1")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_Docking_2")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_Docking_3")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_Docking_4")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_HDMI")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_SD")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_TypeC_1")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_TypeC_2")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_TypeC_3")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_TypeC_4")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_USB_1")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_USB_2")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_USB_3")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Right_USB_4")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SN")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IOId");
+
+                    b.HasIndex("SN")
+                        .IsUnique();
+
+                    b.ToTable("IOResult");
+                });
+
             modelBuilder.Entity("Domain.Enitties.IO.MotionPoint", b =>
                 {
                     b.Property<int>("Id")
@@ -884,6 +1067,25 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Line");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.ModelGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("GroupModelName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RawModelName")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ModelGroup");
                 });
 
             modelBuilder.Entity("Domain.Entities.LED.Job", b =>
@@ -1617,11 +1819,13 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Enitties.IO.IO", b =>
                 {
-                    b.HasOne("Domain.Enitties.Line", null)
+                    b.HasOne("Domain.Enitties.Line", "Line")
                         .WithMany("IOs")
                         .HasForeignKey("LineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Line");
                 });
 
             modelBuilder.Entity("Domain.Enitties.IO.IOConfig", b =>
@@ -1643,6 +1847,17 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Enitties.IO.IO", null)
                         .WithMany("IOModels")
                         .HasForeignKey("IOId");
+                });
+
+            modelBuilder.Entity("Domain.Enitties.IO.IOResult", b =>
+                {
+                    b.HasOne("Domain.Enitties.IO.IO", "IO")
+                        .WithMany("IOResults")
+                        .HasForeignKey("IOId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IO");
                 });
 
             modelBuilder.Entity("Domain.Enitties.IO.MotionPoint", b =>
@@ -1885,6 +2100,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Enitties.IO.IO", b =>
                 {
                     b.Navigation("IOModels");
+
+                    b.Navigation("IOResults");
 
                     b.Navigation("PlugItems");
 

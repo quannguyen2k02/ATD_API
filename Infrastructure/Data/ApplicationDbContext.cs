@@ -52,7 +52,8 @@ namespace Infrastructure.Data
         public DbSet<PressureItem> PressureItems { get; set; }
         public DbSet<PressureManagement> PressureManagements { get; set; }
         public DbSet<PlugItem> PlugItems { get; set; }
-
+        public DbSet<IOResult> IOResults { get; set; }
+        public DbSet<ModelGroup> ModelGroups { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -68,6 +69,7 @@ namespace Infrastructure.Data
             modelBuilder.Entity<LedResult>().HasIndex(r => new { r.ModelName, r.DateTime });
             modelBuilder.Entity<LedResult>().HasIndex(r => r.Result);
             modelBuilder.Entity<LedResult>().HasIndex(r => r.DateTime);
+            modelBuilder.Entity<IOResult>().HasIndex(r=>r.SN).IsUnique();
         }
     }
 }

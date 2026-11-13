@@ -2,6 +2,7 @@
 using Application.IServices.LED;
 using Infrastructure.Exceptions;
 using Infrastructure.Services.LED;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,6 +36,7 @@ namespace ATD_API.Controllers.LED
             }
         }
         [HttpGet("by-device")]
+        [Authorize]
         public async Task<IActionResult> GetLedModelAsync([FromQuery] int deviceId, [FromQuery] int? lastId = null, [FromQuery] int pageSize = 20)
         {
             try

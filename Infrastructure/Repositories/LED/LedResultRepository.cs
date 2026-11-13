@@ -1,4 +1,5 @@
-﻿using Application.DTOs.LedStatistics;
+﻿using Application.Common;
+using Application.DTOs.LedStatistics;
 using Application.DTOs.ResponseDTOs.LED;
 using Application.IRepositories.LED;
 using Dapper;
@@ -202,14 +203,17 @@ namespace Infrastructure.Repositories.LED
 
         public async Task<List<LedResultResponse>> GetBySNAsync(string sn)
         {
-            if(string.IsNullOrEmpty(sn))
+            if (string.IsNullOrWhiteSpace(sn))
                 return new List<LedResultResponse>();
-            var trimmedSN = sn.Trim();
+
+            var snList = sn.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            if (!snList.Any())
+                return new List<LedResultResponse>();
             var query = from r in _context.LedResults.AsNoTracking()
                         join led in _context.LEDs on r.LEDId equals led.Id
                         join line in _context.Lines on led.LineId equals line.Id into lineJoin
                         from line in lineJoin.DefaultIfEmpty()
-                        where r.SN == trimmedSN
+                        where snList.Contains(r.SN) // 👈 Dùng Contains để lọc danh sách
                         orderby r.Id descending
                         select new LedResultResponse
                         {
@@ -223,6 +227,7 @@ namespace Infrastructure.Repositories.LED
                             DeviceName = led.Name,
                             DateTime = r.DateTime
                         };
+
             return await query.ToListAsync();
         }
 
@@ -377,6 +382,102 @@ namespace Infrastructure.Repositories.LED
             var result = (await connection.QueryAsync<FailItemStatisticDto>(sql, parameters)).ToList();
 
             return result;
+        }
+        public async Task<CursorPaged<LedResultResponse>> GetLedLogPagedAsync(
+    LedResultStatisticFilter filter,
+    int? lastId = null,
+    int pageSize = 20)
+        {
+            pageSize = Math.Clamp(pageSize, 1, 100);
+
+            // 1. Lấy Query từ Filter
+            var query = BuildQuery(filter).AsNoTracking();
+
+            // 2. Gắn điều kiện Cursor
+            if (lastId.HasValue)
+            {
+                query = query.Where(r => r.Id < lastId.Value);
+            }
+
+            // 3. Chiếu dữ liệu và phân trang
+            var itemsWithExtra = await query
+                .OrderByDescending(r => r.Id)
+                .Select(r => new LedResultResponse
+                {
+                    Id = r.Id,
+                    LEDId = r.LEDId,
+                    SN = r.SN,
+                    ModelName = r.ModelName,
+                    Result = r.Result,
+                    CT = r.CT,
+                    FailItems = r.FailItems,
+                    // EF Core tự động JOIN bảng LED và Line ở đây
+                    LineName = r.LED != null && r.LED.Line != null ? r.LED.Line.Name : null,
+                    DeviceName = r.LED != null ? r.LED.Name : null,
+                    DateTime = r.DateTime
+                })
+                .Take(pageSize + 1)
+                .ToListAsync();
+
+            // 4. Xử lý kết quả
+            bool hasNextPage = itemsWithExtra.Count > pageSize;
+            var items = hasNextPage ? itemsWithExtra.Take(pageSize).ToList() : itemsWithExtra;
+
+            int? nextCursor = hasNextPage && items.Any() ? items.Last().Id : null;
+
+            return new CursorPaged<LedResultResponse>
+            {
+                Items = items,
+                NextCursor = nextCursor,
+                HasNextPage = hasNextPage,
+                PageSize = pageSize
+            };
+        }
+
+        public async Task<List<ModelStatisticDto>> GetByModelGroupAsync(LedResultStatisticFilter filter)
+        {
+            // 1. Tạo một bản sao của filter nhưng BỎ TRỐNG ModelName
+            // (Giả sử class filter của bạn cho phép khởi tạo hoặc bạn có thể dùng kỹ thuật tương tự)
+            var filterWithoutModel = new LedResultStatisticFilter
+            {
+                LEDId = filter.LEDId,
+                LineId = filter.LineId,
+                FromDate = filter.FromDate,
+                ToDate = filter.ToDate,
+                ModelName = null // 👈 Bỏ qua điều kiện lọc ModelName ở bước này
+            };
+
+            // 2. Lấy Query cơ bản (Đã áp dụng các filter: LEDId, LineId, Date...)
+            var baseQuery = BuildQuery(filterWithoutModel);
+
+            // 3. Thực hiện LEFT JOIN với bảng ModelGroups
+            var joinedQuery = from r in baseQuery
+                              join mg in _context.ModelGroups
+                                  on r.ModelName equals mg.RawModelName into mgs
+                              from mg in mgs.DefaultIfEmpty()
+                              let groupName = mg != null ? mg.GroupModelName : r.ModelName
+                              select new { r, GroupName = groupName };
+
+            // 4. Áp dụng điều kiện lọc theo GroupModelName (nếu có)
+            if (!string.IsNullOrEmpty(filter.ModelName))
+            {
+                joinedQuery = joinedQuery.Where(x => x.GroupName == filter.ModelName);
+            }
+
+            // 5. Group By theo GroupName và tính toán
+            return await joinedQuery
+                .GroupBy(x => x.GroupName)
+                .Select(g => new ModelStatisticDto
+                {
+                    ModelName = g.Key,
+                    Total = g.Count(),
+                    Pass = g.Sum(x => x.r.Result == PassValue ? 1 : 0),
+                    Fail = g.Sum(x => x.r.Result == FailValue ? 1 : 0),
+                    // (Tuỳ chọn) Tính luôn Rate nếu DTO của bạn có 2 trường này:
+
+                })
+                .OrderByDescending(x => x.Total)
+                .ToListAsync();
         }
     }
 }
