@@ -1,8 +1,11 @@
 ﻿using Application.DTOs.RequestDTOs.IO;
 using Application.DTOs.RequestDTOs.LCD;
+using Application.DTOs.RequestDTOs.LED;
 using Application.IServices.IO;
+using ATD_API.Hubs;
 using Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace ATD_API.Controllers.IO
 {
@@ -19,7 +22,9 @@ namespace ATD_API.Controllers.IO
         private readonly IIOPlugService _ioPlugService;
         private readonly IIOReplacementRecordService _svc;
         private readonly IIOResultService _ioResultService;
-        public IOController(IIOModelService ioModelService, IIOConfigManagementService ioConfigManagementService, IIOMotionPointManagementService iOMotionPointManagementService, IIOOffsetManagementService ioOffsetManagementService, IIOPressureService ioPressureService, IIOService iOService, IIOPlugService iOPlugService, IIOReplacementRecordService svc, IIOResultService ioResultService)
+        private readonly IIOStatusService _ioStatusService;
+
+        public IOController(IIOModelService ioModelService, IIOConfigManagementService ioConfigManagementService, IIOMotionPointManagementService iOMotionPointManagementService, IIOOffsetManagementService ioOffsetManagementService, IIOPressureService ioPressureService, IIOService iOService, IIOPlugService iOPlugService, IIOReplacementRecordService svc, IIOResultService ioResultService, IIOStatusService ioStatusService)
         {
             _ioModelService = ioModelService;
             _ioConfigManagementService = ioConfigManagementService;
@@ -30,6 +35,7 @@ namespace ATD_API.Controllers.IO
             _ioPlugService = iOPlugService;
             _svc = svc;
             _ioResultService = ioResultService;
+            _ioStatusService = ioStatusService;
         }
         [HttpPost("Add-New-Model")]
         public async Task<IActionResult> AddNewIOModel(IOModelRequest IOModel)
@@ -85,7 +91,7 @@ namespace ATD_API.Controllers.IO
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Internal server error" });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = ex.Message });
             }
         }
 
@@ -157,7 +163,6 @@ namespace ATD_API.Controllers.IO
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Internal server error" });
             }
-
         }
         [HttpGet("GetIOByLineId")]
         public async Task<IActionResult> GetIOsByLineId(int lineId)

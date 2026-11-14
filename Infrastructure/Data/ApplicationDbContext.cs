@@ -54,6 +54,7 @@ namespace Infrastructure.Data
         public DbSet<PlugItem> PlugItems { get; set; }
         public DbSet<IOResult> IOResults { get; set; }
         public DbSet<ModelGroup> ModelGroups { get; set; }
+        public DbSet<IOStatus> IOStatuses { get; set; }
 
 
         /// <summary>

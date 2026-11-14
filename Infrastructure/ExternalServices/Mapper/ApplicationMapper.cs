@@ -109,7 +109,8 @@ namespace Infrastructure.ExternalServices.Mapper
             CreateMap<ReplacementRecordRequest, ReplacementRecord>();
             CreateMap<IOResult, IOResultResponse>();
             CreateMap<IOResultRequest, IOResult>();
-
+            CreateMap<IOStatusRequest, IOStatus>();
+            CreateMap<IOStatus, IOStatusResponse>();
             /// <summary>
             /// Mapper ModelGroup
             CreateMap<ModelGroup, ModelGroupResponse>();

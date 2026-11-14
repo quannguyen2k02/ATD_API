@@ -37,4 +37,5 @@ namespace ATD_API.Hubs
             await base.OnDisconnectedAsync(exception);
         }
     }
+    
 }

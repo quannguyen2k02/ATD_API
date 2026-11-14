@@ -90,7 +90,8 @@ public static class DependencyInjection
         services.AddScoped<IIOReplacementRecordService, IOReplacementRecordService>();
         services.AddScoped<IIOResultService, IOResultService>();
         services.AddScoped<IIOResultRepository, IOResultRepository>();
-
+        services.AddScoped<IIOStatusRepository, IOStatusRepository>();
+        services.AddScoped<IIOStatusService, IOStatusService>();
         //Identity
 
         services.AddScoped<IAccountRepository, AccountRepository>();
