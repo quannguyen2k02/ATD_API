@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
+﻿
+using Domain.Entities.LED;
+using System.ComponentModel.DataAnnotations.Schema;
+using LedDevice = Domain.Entities.LED.LED;
 namespace Domain.Enitties.IO
 {
     [Table("IOResult")]

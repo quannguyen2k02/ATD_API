@@ -1,9 +1,12 @@
-﻿using Application.DTOs.RequestDTOs.IO;
+﻿using Application.DTOs.IOStatitics;
+using Application.DTOs.LedStatistics;
+using Application.DTOs.RequestDTOs.IO;
 using Application.DTOs.RequestDTOs.LCD;
 using Application.DTOs.RequestDTOs.LED;
 using Application.IServices.IO;
 using ATD_API.Hubs;
 using Infrastructure.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
@@ -239,6 +242,65 @@ namespace ATD_API.Controllers.IO
                 return StatusCode(500, "Internal server error."+ex.Message);
             }
 
+        }
+
+        [HttpGet("overview")]
+        [Authorize]
+
+        public async Task<IActionResult> Overview([FromQuery] IOResultStatisticFilter filter)
+          => Ok(await _ioResultService.GetOverviewAsync(filter));
+
+        [HttpGet("by-model")]
+        [Authorize]
+
+        public async Task<IActionResult> ByModel([FromQuery] IOResultStatisticFilter filter)
+            => Ok(await _ioResultService.GetByModelAsync(filter));
+        [HttpGet("by-model-group")]
+        [Authorize]
+
+        public async Task<IActionResult> ByModelGroup([FromQuery] IOResultStatisticFilter filter)
+            => Ok(await _ioResultService.GetByModelGroupAsync(filter));
+
+        [HttpGet("by-line")]
+        [Authorize]
+
+        public async Task<IActionResult> ByLine([FromQuery] IOResultStatisticFilter filter)
+            => Ok(await _ioResultService.GetByLineAsync(filter));
+
+        [HttpGet("by-device")]
+        [Authorize]
+
+        public async Task<IActionResult> ByDevice([FromQuery] IOResultStatisticFilter filter)
+            => Ok(await _ioResultService.GetByDeviceAsync(filter));
+
+        [HttpGet("by-day")]
+        [Authorize]
+
+        public async Task<IActionResult> ByDay([FromQuery] IOResultStatisticFilter filter)
+            => Ok(await _ioResultService.GetByDayAsync(filter));
+        [HttpGet("by-hour")]
+        [Authorize]
+
+        public async Task<IActionResult> ByHour([FromQuery] IOResultStatisticFilter filter)
+            => Ok(await _ioResultService.GetByHourAsync(filter));
+        [HttpGet("by-sn")]
+        [Authorize]
+
+        public async Task<IActionResult> GetBySN([FromQuery] string sn)
+        {
+            if (string.IsNullOrWhiteSpace(sn))
+                return BadRequest("SN không được rỗng.");
+
+            var result = await _ioResultService.GetBySNAsync(sn);
+            return Ok(result);
+        }
+        [HttpGet("io-log")]
+        [Authorize]
+
+        public async Task<IActionResult> GetLedLog([FromQuery] IOResultStatisticFilter filter, int? lastId = null, int pageSize = 20)
+        {
+            var result = await _ioResultService.GetIOResultLogPagedAsync(filter, lastId, pageSize);
+            return Ok(result);
         }
     }
 }

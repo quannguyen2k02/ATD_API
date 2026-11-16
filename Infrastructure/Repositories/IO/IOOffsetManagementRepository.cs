@@ -17,17 +17,21 @@ namespace Infrastructure.Repositories.IO
         {
             pageSize = Math.Clamp(pageSize, 1, 100);
 
-            var baseQuery = _context.OffsetManagements
+            // 1. Khai báo tường minh IQueryable
+            IQueryable<OffsetManagement> baseQuery = _context.OffsetManagements
                 .Include(x => x.Offsets)
                 .Where(x => x.IOModelId == modelId);
 
+            // 2. Sắp xếp giảm dần nên dùng dấu < để lấy các bản ghi cũ hơn
             if (lastId.HasValue)
             {
-                baseQuery = baseQuery.Where(x => x.Id > lastId.Value);
+                baseQuery = baseQuery.Where(x => x.Id < lastId.Value);
             }
 
+            // 3. Sắp xếp theo ngày tạo mới nhất
             var itemsWithExtra = await baseQuery
-                .OrderBy(x => x.Id)
+                .OrderByDescending(x => x.CreateDate) // Mới nhất trước
+                .ThenByDescending(x => x.Id)          // Nếu trùng ngày thì ID lớn hơn đứng trước
                 .Take(pageSize + 1)
                 .ToListAsync();
 

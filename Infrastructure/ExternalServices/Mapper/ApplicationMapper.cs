@@ -107,7 +107,11 @@ namespace Infrastructure.ExternalServices.Mapper
             CreateMap<PlugItem, PlugItemDTO>();
             CreateMap<PlugItemDTO, PlugItem>();
             CreateMap<ReplacementRecordRequest, ReplacementRecord>();
-            CreateMap<IOResult, IOResultResponse>();
+            CreateMap<IOResult, IOResultResponse>()
+            .ForMember(dest => dest.DeviceName,
+                       opt => opt.MapFrom(src => src.IO != null ? src.IO.DeviceName : null))
+            .ForMember(dest => dest.LineName,
+                       opt => opt.MapFrom(src => src.IO != null && src.IO.Line != null ? src.IO.Line.Name : null));
             CreateMap<IOResultRequest, IOResult>();
             CreateMap<IOStatusRequest, IOStatus>();
             CreateMap<IOStatus, IOStatusResponse>();

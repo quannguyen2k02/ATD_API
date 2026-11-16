@@ -58,5 +58,7 @@
         public string? Back_Docking_3 { get; set; }
         public string? Back_Docking_4 { get; set; }
         public DateTime CreateDate { get; set; }
+        public string? LineName { get; set; }
+        public string? DeviceName { get; set; }
     }
 }

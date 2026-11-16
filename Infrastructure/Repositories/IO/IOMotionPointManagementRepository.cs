@@ -17,17 +17,21 @@ namespace Infrastructure.Repositories.IO
             // Giới hạn pageSize
             pageSize = Math.Clamp(pageSize, 1, 100);
 
-            var baseQuery = _context.MotionPointsManagements
+            // 1. Khai báo tường minh IQueryable
+            IQueryable<MotionPointsManagement> baseQuery = _context.MotionPointsManagements
                 .Include(x => x.MotionPoints)
                 .Where(x => x.IOModelId == modelId);
 
+            // 2. Vì sắp xếp giảm dần, dùng dấu < để lấy các bản ghi cũ hơn
             if (lastId.HasValue)
             {
-                baseQuery = baseQuery.Where(x => x.Id > lastId.Value);
+                baseQuery = baseQuery.Where(x => x.Id < lastId.Value);
             }
 
+            // 3. Sắp xếp mới nhất đến cũ nhất
             var itemsWithExtra = await baseQuery
-                .OrderBy(x => x.Id)
+                .OrderByDescending(x => x.CreateDate) // Sắp xếp theo ngày tạo mới nhất
+                .ThenByDescending(x => x.Id)          // Nếu trùng ngày thì ID lớn hơn đứng trước
                 .Take(pageSize + 1)
                 .ToListAsync();
 
