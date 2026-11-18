@@ -148,7 +148,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
-app.MapHub<LEDNotificationHub>("/ledNotificationHub");
+app.MapHub<NotificationHub>("/notificationHub");
 app.MapControllers();
 
 app.Run();

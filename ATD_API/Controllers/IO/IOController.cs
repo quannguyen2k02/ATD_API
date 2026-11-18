@@ -26,8 +26,9 @@ namespace ATD_API.Controllers.IO
         private readonly IIOReplacementRecordService _svc;
         private readonly IIOResultService _ioResultService;
         private readonly IIOStatusService _ioStatusService;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
-        public IOController(IIOModelService ioModelService, IIOConfigManagementService ioConfigManagementService, IIOMotionPointManagementService iOMotionPointManagementService, IIOOffsetManagementService ioOffsetManagementService, IIOPressureService ioPressureService, IIOService iOService, IIOPlugService iOPlugService, IIOReplacementRecordService svc, IIOResultService ioResultService, IIOStatusService ioStatusService)
+        public IOController(IIOModelService ioModelService, IIOConfigManagementService ioConfigManagementService, IIOMotionPointManagementService iOMotionPointManagementService, IIOOffsetManagementService ioOffsetManagementService, IIOPressureService ioPressureService, IIOService iOService, IIOPlugService iOPlugService, IIOReplacementRecordService svc, IIOResultService ioResultService, IIOStatusService ioStatusService, IHubContext<NotificationHub> hubContext  )
         {
             _ioModelService = ioModelService;
             _ioConfigManagementService = ioConfigManagementService;
@@ -39,6 +40,7 @@ namespace ATD_API.Controllers.IO
             _svc = svc;
             _ioResultService = ioResultService;
             _ioStatusService = ioStatusService;
+            _hubContext = hubContext;
         }
         [HttpPost("Add-New-Model")]
         public async Task<IActionResult> AddNewIOModel(IOModelRequest IOModel)
@@ -300,6 +302,15 @@ namespace ATD_API.Controllers.IO
         public async Task<IActionResult> GetLedLog([FromQuery] IOResultStatisticFilter filter, int? lastId = null, int pageSize = 20)
         {
             var result = await _ioResultService.GetIOResultLogPagedAsync(filter, lastId, pageSize);
+            return Ok(result);
+        }
+        [HttpPost("io-status")]
+        public async Task<IActionResult> AddIOStatus([FromBody] IOStatusRequest request)
+        {
+            if (request == null)
+                return BadRequest("Request body is null.");
+            var result = await _ioStatusService.AddIOStatusAsync(request);
+            await _hubContext.Clients.Group("IO_Group").SendAsync("ReceiveMessage", request);
             return Ok(result);
         }
     }

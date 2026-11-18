@@ -1,9 +1,10 @@
 ﻿using Application.DTOs.RequestDTOs.IO;
+using Application.DTOs.ResponseDTOs.IO;
 
 namespace Application.IServices.IO
 {
     public interface IIOStatusService
     {
-        public Task<IOStatusRequest> AddIOStatusAsync(IOStatusRequest request);
+        public Task<IOStatusResponse> AddIOStatusAsync(IOStatusRequest request);
     }
 }

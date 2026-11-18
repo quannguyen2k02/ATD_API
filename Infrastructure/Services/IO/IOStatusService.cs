@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.RequestDTOs.IO;
+using Application.DTOs.ResponseDTOs.IO;
 using Application.IRepositories.IO;
 using Application.IServices.IO;
 using AutoMapper;
@@ -18,7 +19,7 @@ namespace Infrastructure.Services.IO
             _mapper = mapper;
             _ioRepository = ioRepository;
         }
-        public async Task<IOStatusRequest> AddIOStatusAsync(IOStatusRequest request)
+        public async Task<IOStatusResponse> AddIOStatusAsync(IOStatusRequest request)
         {
             var io = await _ioRepository.GetByIDAsync(request.IOId);
             if (io == null)
@@ -26,7 +27,7 @@ namespace Infrastructure.Services.IO
                 throw new NotFoundException($"IO with ID {request.IOId} not found.");
             }
             var result = await _ioStatusRepository.Add(_mapper.Map<IOStatus>(request));
-            return _mapper.Map<IOStatusRequest>(result);
+            return _mapper.Map<IOStatusResponse>(result);
         }
     }
 }

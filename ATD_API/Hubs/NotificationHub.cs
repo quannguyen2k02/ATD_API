@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.SignalR;
-namespace ATD_API.Hubs
+﻿namespace ATD_API.Hubs
 {
-    public class LEDNotificationHub : Hub
+    using Microsoft.AspNetCore.SignalR;
+
+    public class NotificationHub : Hub
     {
         // Các phương thức từ client có thể gọi
         public async Task SendMessage(string user, string message)
@@ -23,6 +24,20 @@ namespace ATD_API.Hubs
             await Clients.Group(groupName).SendAsync("GroupJoined", $"{Context.ConnectionId} joined group {groupName}");
         }
 
+        // Hàm tiện ích: Tự động vào group LED
+        public async Task JoinLedGroup()
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, "LED_Group");
+            Console.WriteLine($"Client {Context.ConnectionId} joined LED_Group");
+        }
+
+        // Hàm tiện ích: Tự động vào group IO
+        public async Task JoinIoGroup()
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, "IO_Group");
+            Console.WriteLine($"Client {Context.ConnectionId} joined IO_Group");
+        }
+
         // Xử lý khi client kết nối
         public override async Task OnConnectedAsync()
         {
@@ -31,11 +46,11 @@ namespace ATD_API.Hubs
         }
 
         // Xử lý khi client ngắt kết nối
-        public override async Task OnDisconnectedAsync(Exception exception)
+        public override async Task OnDisconnectedAsync(Exception? exception)
         {
             Console.WriteLine($"Client disconnected: {Context.ConnectionId}");
             await base.OnDisconnectedAsync(exception);
         }
     }
-    
+
 }

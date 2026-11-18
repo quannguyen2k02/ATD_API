@@ -392,6 +392,30 @@ namespace Infrastructure.Migrations
                     b.ToTable("IOResult");
                 });
 
+            modelBuilder.Entity("Domain.Enitties.IO.IOStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("IOId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IOId");
+
+                    b.ToTable("IOStatus");
+                });
+
             modelBuilder.Entity("Domain.Enitties.IO.MotionPoint", b =>
                 {
                     b.Property<int>("Id")
@@ -1892,6 +1916,15 @@ namespace Infrastructure.Migrations
                     b.Navigation("IO");
                 });
 
+            modelBuilder.Entity("Domain.Enitties.IO.IOStatus", b =>
+                {
+                    b.HasOne("Domain.Enitties.IO.IO", null)
+                        .WithMany("IOStatuses")
+                        .HasForeignKey("IOId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Enitties.IO.MotionPoint", b =>
                 {
                     b.HasOne("Domain.Enitties.IO.MotionPointsManagement", null)
@@ -2145,6 +2178,8 @@ namespace Infrastructure.Migrations
                     b.Navigation("IOModels");
 
                     b.Navigation("IOResults");
+
+                    b.Navigation("IOStatuses");
 
                     b.Navigation("PlugItems");
 

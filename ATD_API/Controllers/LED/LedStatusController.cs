@@ -13,8 +13,8 @@ namespace ATD_API.Controllers.LED
     {
         private readonly ILogger<LedStatusController> _logger;
         private readonly ILedStatusService _ledStatusService;
-        private readonly IHubContext<LEDNotificationHub> _hubContext;
-        public LedStatusController(ILogger<LedStatusController> logger, ILedStatusService ledStatusService, IHubContext<LEDNotificationHub> hubContext)
+        private readonly IHubContext<NotificationHub> _hubContext;
+        public LedStatusController(ILogger<LedStatusController> logger, ILedStatusService ledStatusService, IHubContext<NotificationHub> hubContext)
         {
             _logger = logger;
             _ledStatusService = ledStatusService;
@@ -27,7 +27,7 @@ namespace ATD_API.Controllers.LED
             {
                 _logger.LogInformation("Nhận yêu cầu cập nhật trạng thái LED");
                 var result = await _ledStatusService.AddNewStatus(ledDeviceStatusRequest);
-                await _hubContext.Clients.All.SendAsync("ReceiveNotification", ledDeviceStatusRequest);
+                await _hubContext.Clients.Group("LED_Group").SendAsync("ReceiveMessage", ledDeviceStatusRequest);
                 return Ok(result);
             }
             catch (NotFoundException ex)
