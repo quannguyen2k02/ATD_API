@@ -23,22 +23,17 @@
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
             await Clients.Group(groupName).SendAsync("GroupJoined", $"{Context.ConnectionId} joined group {groupName}");
         }
-
-        // Hàm tiện ích: Tự động vào group LED
         public async Task JoinLedGroup()
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, "LED_Group");
             Console.WriteLine($"Client {Context.ConnectionId} joined LED_Group");
         }
-
-        // Hàm tiện ích: Tự động vào group IO
         public async Task JoinIoGroup()
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, "IO_Group");
             Console.WriteLine($"Client {Context.ConnectionId} joined IO_Group");
         }
 
-        // Xử lý khi client kết nối
         public override async Task OnConnectedAsync()
         {
             Console.WriteLine($"Client connected: {Context.ConnectionId}");

@@ -1,5 +1,6 @@
 ﻿using Application.Common;
 using Application.DTOs.IOStatitics;
+using Application.DTOs.LedStatistics;
 using Application.IRepositories.IO;
 using Domain.Enitties.IO;
 using Infrastructure.Data;
@@ -171,9 +172,109 @@ namespace Infrastructure.Repositories.IO
                 .ToListAsync();
         }
 
-        public Task<List<Application.DTOs.IOStatitics.FailItemStatisticDto>> GetFailItemStatisticsAsync(IOResultStatisticFilter filter)
+        public async Task<List<Application.DTOs.IOStatitics.FailItemStatisticDto>> GetFailItemStatisticsAsync(IOResultStatisticFilter filter)
         {
-            throw new NotImplementedException();
+            // 1. Lấy TẤT CẢ dữ liệu thỏa mãn filter (Không chỉ lấy Result == Fail)
+            var allRecords = await BuildQuery(filter)
+                // Chỉ Select các cột trạng thái để giảm tải bộ nhớ
+                .Select(x => new
+                {
+                    x.Left_TypeC_1,
+                    x.Left_TypeC_2,
+                    x.Left_HDMI,
+                    x.Left_USB_1,
+                    x.Left_USB_2,
+                    x.Left_Audio,
+                    x.Left_AudioV2,
+                    x.Left_Docking,
+                    x.Left_Docking_1,
+                    x.Left_Docking_2,
+                    x.Left_Docking_3,
+                    x.Left_Docking_4,
+
+                    x.Right_TypeC_1,
+                    x.Right_TypeC_2,
+                    x.Right_HDMI,
+                    x.Right_USB_1,
+                    x.Right_USB_2,
+                    x.Right_Audio,
+                    x.Right_AudioV2,
+                    x.Right_Docking,
+                    x.Right_Docking_1,
+                    x.Right_Docking_2,
+                    x.Right_Docking_3,
+                    x.Right_Docking_4,
+                    x.Back_TypeC_1,
+                    x.Back_TypeC_2,
+                    x.Back_HDMI,
+                    x.Back_USB1,
+                    x.Back_USB2,
+                    x.Back_Audio,
+                })
+                .ToListAsync();
+
+            // Nếu không có dữ liệu nào thì trả về rỗng
+            if (!allRecords.Any()) return new List<Application.DTOs.IOStatitics.FailItemStatisticDto>();
+
+            // 2. Khởi tạo 2 Dictionary để đếm
+            var failCounts = new Dictionary<string, int>();      // Đếm số lần lỗi
+            var totalCountsPerColumn = new Dictionary<string, int>(); // Đếm tổng số bản ghi CÓ DỮ LIỆU của cột
+
+            // 3. Duyệt dữ liệu
+            foreach (var record in allRecords)
+            {
+                var properties = record.GetType().GetProperties();
+
+                foreach (var prop in properties)
+                {
+                    var value = prop.GetValue(record)?.ToString();
+                    string itemName = prop.Name;
+
+                    // Nếu cột CÓ DỮ LIỆU (khác null và khác rỗng)
+                    if (!string.IsNullOrWhiteSpace(value))
+                    {
+                        // Tăng tổng số bản ghi có dữ liệu của cột này lên 1
+                        if (totalCountsPerColumn.ContainsKey(itemName))
+                            totalCountsPerColumn[itemName]++;
+                        else
+                            totalCountsPerColumn[itemName] = 1;
+
+                        // Nếu dữ liệu KHÔNG chứa chữ "pass" -> Đây là lỗi
+                        if (!value.Contains("pass", StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (failCounts.ContainsKey(itemName))
+                                failCounts[itemName]++;
+                            else
+                                failCounts[itemName] = 1;
+                        }
+                    }
+                }
+            }
+
+            // 4. Tính toán tỉ lệ và map sang DTO
+            var result = new List<Application.DTOs.IOStatitics.FailItemStatisticDto>();
+
+            foreach (var kvp in failCounts)
+            {
+                string itemName = kvp.Key;
+                int failCount = kvp.Value;
+                int totalCount = totalCountsPerColumn[itemName]; // Mẫu số riêng của cột này
+
+                // Tính Rate: (Fail / Tổng có dữ liệu của cột) * 100
+                double rate = totalCount > 0
+                    ? Math.Round(((double)failCount / totalCount) * 100, 2)
+                    : 0;
+
+                result.Add(new Application.DTOs.IOStatitics.FailItemStatisticDto
+                {
+                    FailItems = itemName,
+                    Count = failCount,
+                    Rate = rate
+                });
+            }
+
+            // 5. Sắp xếp giảm dần theo số lượng lỗi và trả về
+            return result.OrderByDescending(x => x.Count).ToList();
         }
 
         public async Task<List<IOResult>> GetIOResultLogAsync(IOResultStatisticFilter filter)
@@ -223,9 +324,19 @@ namespace Infrastructure.Repositories.IO
                 PageSize = pageSize
             };
         }
-        public Task<IOResultStatisticDto> GetOverviewAsync(IOResultStatisticFilter filter)
+        public async Task<IOResultStatisticDto> GetOverviewAsync(IOResultStatisticFilter filter)
         {
-            throw new NotImplementedException();
+            var result = await BuildQuery(filter)
+                .GroupBy(r => 1)
+                .Select(g => new IOResultStatisticDto
+                {
+                    Total = g.Count(),
+                    Pass = g.Sum(r => r.Result == PassValue ? 1 : 0),
+                    Fail = g.Sum(r => r.Result == FailValue ? 1 : 0)
+                })
+                .FirstOrDefaultAsync();
+
+            return result ?? new IOResultStatisticDto();
         }
         private IQueryable<IOResult> BuildQuery(IOResultStatisticFilter filter)
         {

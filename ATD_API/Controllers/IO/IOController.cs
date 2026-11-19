@@ -7,6 +7,7 @@ using Application.IServices.IO;
 using ATD_API.Hubs;
 using Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
@@ -312,6 +313,19 @@ namespace ATD_API.Controllers.IO
             var result = await _ioStatusService.AddIOStatusAsync(request);
             await _hubContext.Clients.Group("IO_Group").SendAsync("ReceiveMessage", request);
             return Ok(result);
+        }
+        [HttpGet("fail-statistics")]
+        public async Task<IActionResult> GetIOStatistics([FromQuery] IOResultStatisticFilter filter)
+        {
+            try
+            {
+                var result = await _ioResultService.GetFailItemStatisticsAsync(filter);
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, "Internal server error." + ex.Message);
+            }
         }
     }
 }

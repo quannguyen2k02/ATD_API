@@ -82,9 +82,7 @@ namespace Infrastructure.Services.IO
         }
 
         public Task<List<Application.DTOs.IOStatitics.FailItemStatisticDto>> GetFailItemStatisticsAsync(IOResultStatisticFilter filter)
-        {
-            throw new NotImplementedException();
-        }
+        => _ioResultRepository.GetFailItemStatisticsAsync(NormalizeFilter(filter));
 
         public async Task<List<IOResultResponse>> GetIOResultLogAsync(IOResultStatisticFilter filter)
         {
@@ -105,9 +103,9 @@ namespace Infrastructure.Services.IO
             };
         }
 
-        public Task<IOResultStatisticDto> GetOverviewAsync(IOResultStatisticFilter filter)
+        public async Task<IOResultStatisticDto> GetOverviewAsync(IOResultStatisticFilter filter)
         {
-            throw new NotImplementedException();
+            return await _ioResultRepository.GetOverviewAsync(filter);
         }
         private static IOResultStatisticFilter NormalizeFilter(IOResultStatisticFilter filter)
         {

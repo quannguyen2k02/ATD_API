@@ -55,8 +55,6 @@ namespace Infrastructure.Data
         public DbSet<IOResult> IOResults { get; set; }
         public DbSet<ModelGroup> ModelGroups { get; set; }
         public DbSet<IOStatus> IOStatuses { get; set; }
-
-
         /// <summary>
         /// Refresh Token 
         /// </summary>
