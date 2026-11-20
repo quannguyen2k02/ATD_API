@@ -683,6 +683,30 @@ namespace Infrastructure.Migrations
                     b.ToTable("ReplacementRecord");
                 });
 
+            modelBuilder.Entity("Domain.Enitties.IO.TestDistance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Distance")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IOId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Module")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IOId");
+
+                    b.ToTable("TestDistance");
+                });
+
             modelBuilder.Entity("Domain.Enitties.IO.VccdItem", b =>
                 {
                     b.Property<int>("Id")
@@ -2023,6 +2047,15 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("IOId");
                 });
 
+            modelBuilder.Entity("Domain.Enitties.IO.TestDistance", b =>
+                {
+                    b.HasOne("Domain.Enitties.IO.IO", null)
+                        .WithMany("TestDistances")
+                        .HasForeignKey("IOId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Enitties.IO.VccdItem", b =>
                 {
                     b.HasOne("Domain.Enitties.IO.IO", null)
@@ -2223,6 +2256,8 @@ namespace Infrastructure.Migrations
                     b.Navigation("PlugItems");
 
                     b.Navigation("ReplacementRecords");
+
+                    b.Navigation("TestDistances");
 
                     b.Navigation("VccdItems");
                 });
