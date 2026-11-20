@@ -27,9 +27,10 @@ namespace ATD_API.Controllers.IO
         private readonly IIOReplacementRecordService _svc;
         private readonly IIOResultService _ioResultService;
         private readonly IIOStatusService _ioStatusService;
+        private readonly IIOVccdService _ioVccdService;
         private readonly IHubContext<NotificationHub> _hubContext;
 
-        public IOController(IIOModelService ioModelService, IIOConfigManagementService ioConfigManagementService, IIOMotionPointManagementService iOMotionPointManagementService, IIOOffsetManagementService ioOffsetManagementService, IIOPressureService ioPressureService, IIOService iOService, IIOPlugService iOPlugService, IIOReplacementRecordService svc, IIOResultService ioResultService, IIOStatusService ioStatusService, IHubContext<NotificationHub> hubContext  )
+        public IOController(IIOModelService ioModelService, IIOConfigManagementService ioConfigManagementService, IIOMotionPointManagementService iOMotionPointManagementService, IIOOffsetManagementService ioOffsetManagementService, IIOPressureService ioPressureService, IIOService iOService, IIOPlugService iOPlugService, IIOReplacementRecordService svc, IIOResultService ioResultService, IIOStatusService ioStatusService, IHubContext<NotificationHub> hubContext, IIOVccdService ioVccdService)
         {
             _ioModelService = ioModelService;
             _ioConfigManagementService = ioConfigManagementService;
@@ -41,6 +42,7 @@ namespace ATD_API.Controllers.IO
             _svc = svc;
             _ioResultService = ioResultService;
             _ioStatusService = ioStatusService;
+            _ioVccdService = ioVccdService;
             _hubContext = hubContext;
         }
         [HttpPost("Add-New-Model")]
@@ -323,6 +325,25 @@ namespace ATD_API.Controllers.IO
                 return Ok(result);
             }
             catch(Exception ex)
+            {
+                return StatusCode(500, "Internal server error." + ex.Message);
+            }
+        }
+        [HttpPut("Update-Vccd")]
+        public async Task<IActionResult> UpdateVccd([FromBody] IOVccdRequest request)
+        {
+            if (request == null)
+                return BadRequest("Request body is null.");
+            try
+            {
+                var result = await _ioVccdService.UpdateVccd(request);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error." + ex.Message);
             }

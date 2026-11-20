@@ -683,6 +683,36 @@ namespace Infrastructure.Migrations
                     b.ToTable("ReplacementRecord");
                 });
 
+            modelBuilder.Entity("Domain.Enitties.IO.VccdItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Camera")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("ExposureTime")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IOId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Module")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IOId");
+
+                    b.ToTable("VccdItem");
+                });
+
             modelBuilder.Entity("Domain.Enitties.LCD.LCD", b =>
                 {
                     b.Property<int>("Id")
@@ -1993,6 +2023,15 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("IOId");
                 });
 
+            modelBuilder.Entity("Domain.Enitties.IO.VccdItem", b =>
+                {
+                    b.HasOne("Domain.Enitties.IO.IO", null)
+                        .WithMany("VccdItems")
+                        .HasForeignKey("IOId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Enitties.LCD.LCD", b =>
                 {
                     b.HasOne("Domain.Enitties.Line", null)
@@ -2184,6 +2223,8 @@ namespace Infrastructure.Migrations
                     b.Navigation("PlugItems");
 
                     b.Navigation("ReplacementRecords");
+
+                    b.Navigation("VccdItems");
                 });
 
             modelBuilder.Entity("Domain.Enitties.IO.IOConfigManagement", b =>

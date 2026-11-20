@@ -1,5 +1,4 @@
-﻿using Application.DTOs.ResponseDTOs.IO;
-using Application.IRepositories;
+﻿using Application.IRepositories;
 using Application.IRepositories.IO;
 using Application.IRepositories.LCD;
 using Application.IRepositories.LED;
@@ -92,6 +91,8 @@ public static class DependencyInjection
         services.AddScoped<IIOResultRepository, IOResultRepository>();
         services.AddScoped<IIOStatusRepository, IOStatusRepository>();
         services.AddScoped<IIOStatusService, IOStatusService>();
+        services.AddScoped<IIOVccdRepository, IOVccdRepository>();
+        services.AddScoped<IIOVccdService, IOVccdService>();
         //Identity
 
         services.AddScoped<IAccountRepository, AccountRepository>();
@@ -107,9 +108,9 @@ public static class DependencyInjection
             options.Password.RequireNonAlphanumeric = false;
             options.Password.RequiredLength = 6;
         })
-        .AddRoles<IdentityRole>() // Bắt buộc phải có để dùng RoleManager
+        .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
-        .AddDefaultTokenProviders(); // Lỗi sẽ biến mất sau khi thêm FrameworkReference
+        .AddDefaultTokenProviders();
         return services;
     }
 }

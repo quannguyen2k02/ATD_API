@@ -17,6 +17,7 @@ namespace Domain.Enitties.IO
         public ICollection<ReplacementRecord>? ReplacementRecords { get; set; }
         public ICollection<IOResult>? IOResults { get; set; }
         public ICollection<IOStatus>? IOStatuses { get; set; }
+        public ICollection<VccdItem>? VccdItems { get; set; }
         public virtual Line? Line { get; set; }
     }
 }
