@@ -93,6 +93,8 @@ public static class DependencyInjection
         services.AddScoped<IIOStatusService, IOStatusService>();
         services.AddScoped<IIOVccdRepository, IOVccdRepository>();
         services.AddScoped<IIOVccdService, IOVccdService>();
+        services.AddScoped<IIOTestDistanceRepository, IOTestDistanceRepository>();
+        services.AddScoped<IIOTestDistanceService, IOTestDistanceService>();
         //Identity
 
         services.AddScoped<IAccountRepository, AccountRepository>();

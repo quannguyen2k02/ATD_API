@@ -117,6 +117,8 @@ namespace Infrastructure.ExternalServices.Mapper
             CreateMap<IOStatus, IOStatusResponse>();
             CreateMap<IOVccdDTO, VccdItem>();
             CreateMap<VccdItem, IOVccdDTO>();
+            CreateMap<IOTestDistanceDTO, TestDistance>();
+            CreateMap<TestDistance, IOTestDistanceDTO>();
             /// <summary>
             /// Mapper ModelGroup
             CreateMap<ModelGroup, ModelGroupResponse>();

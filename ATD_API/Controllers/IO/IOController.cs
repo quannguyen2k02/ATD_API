@@ -28,9 +28,10 @@ namespace ATD_API.Controllers.IO
         private readonly IIOResultService _ioResultService;
         private readonly IIOStatusService _ioStatusService;
         private readonly IIOVccdService _ioVccdService;
+        private readonly IIOTestDistanceService _ioTestDistanceService;
         private readonly IHubContext<NotificationHub> _hubContext;
 
-        public IOController(IIOModelService ioModelService, IIOConfigManagementService ioConfigManagementService, IIOMotionPointManagementService iOMotionPointManagementService, IIOOffsetManagementService ioOffsetManagementService, IIOPressureService ioPressureService, IIOService iOService, IIOPlugService iOPlugService, IIOReplacementRecordService svc, IIOResultService ioResultService, IIOStatusService ioStatusService, IHubContext<NotificationHub> hubContext, IIOVccdService ioVccdService)
+        public IOController(IIOModelService ioModelService, IIOConfigManagementService ioConfigManagementService, IIOMotionPointManagementService iOMotionPointManagementService, IIOOffsetManagementService ioOffsetManagementService, IIOPressureService ioPressureService, IIOService iOService, IIOPlugService iOPlugService, IIOReplacementRecordService svc, IIOResultService ioResultService, IIOStatusService ioStatusService, IHubContext<NotificationHub> hubContext, IIOVccdService ioVccdService, IIOTestDistanceService ioTestDistanceService)
         {
             _ioModelService = ioModelService;
             _ioConfigManagementService = ioConfigManagementService;
@@ -43,6 +44,7 @@ namespace ATD_API.Controllers.IO
             _ioResultService = ioResultService;
             _ioStatusService = ioStatusService;
             _ioVccdService = ioVccdService;
+            _ioTestDistanceService = ioTestDistanceService;
             _hubContext = hubContext;
         }
         [HttpPost("Add-New-Model")]
@@ -337,6 +339,25 @@ namespace ATD_API.Controllers.IO
             try
             {
                 var result = await _ioVccdService.UpdateVccd(request);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error." + ex.Message);
+            }
+        }
+        [HttpPut("Update-TestDistance")]
+        public async Task<IActionResult> UpdateTestDistance([FromBody] IOTestDistanceRequest request)
+        {
+            if (request == null)
+                return BadRequest("Request body is null.");
+            try
+            {
+                var result = await _ioTestDistanceService.UpdateTestDistance(request);
                 return Ok(result);
             }
             catch (NotFoundException ex)
